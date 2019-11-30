@@ -1,0 +1,1 @@
+python -m torch.distributed.launch --nproc_per_node=4 --master_port=4321 codes/train.py -opt codes/options/train/mytrain_all.yml --launcher pytorch

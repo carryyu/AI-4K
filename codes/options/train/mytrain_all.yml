@@ -1,5 +1,5 @@
 #### general settings
-name: EDVR_train_all_noaug_RB40
+name: EDVR_train_all
 use_tb_logger: false
 model: video_base
 distortion: sr
@@ -14,8 +14,8 @@ datasets:
     interval_list: [1]
     random_reverse: false
     border_mode: false
-    dataroot_GT: /home/lzy/Downloads/EDVR-master/datasets/all_data/gt
-    dataroot_LQ: /home/lzy/Downloads/EDVR-master/datasets/all_data/input
+    dataroot_GT: datasets/all_data/gt
+    dataroot_LQ: datasets/all_data/input
     cache_keys: ~
 
     N_frames: 5
@@ -29,14 +29,14 @@ datasets:
     random_crop: True
     color: RGB
     cache_data: False
-  val:
-    name: REDS4
-    mode: video_test
-    dataroot_GT: /home/lzy/Downloads/EDVR-master/datasets/pngs/gt
-    dataroot_LQ: /home/lzy/Downloads/EDVR-master/datasets/pngs/input
-    cache_data: False
-    N_frames: 5
-    padding: new_info
+#  val:
+#    name: REDS4
+#    mode: video_test
+#    dataroot_GT: /home/lzy/Downloads/EDVR-master/datasets/pngs/gt
+#    dataroot_LQ: /home/lzy/Downloads/EDVR-master/datasets/pngs/input
+#    cache_data: False
+#    N_frames: 5
+#    padding: new_info
 #  val:
 #    name: REDS4
 #    mode: video_test_lmdb
@@ -59,7 +59,7 @@ network_G:
   nframes: 5
   groups: 8
   front_RBs: 5
-  back_RBs: 40
+  back_RBs: 10
   predeblur: true
   HR_in: false
   w_TSA: true
@@ -67,9 +67,9 @@ network_G:
 
 #### path
 path:
-  pretrain_model_G: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all_noaug_RB40/models/20000_G.pth
+  pretrain_model_G: ~
   strict_load: false
-  resume_state: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all_noaug_RB40/training_state/20000.state
+  resume_state: ~
 
 #### training settings: learning rate scheme, loss
 train:

@@ -11,7 +11,7 @@ datasets:
   test:
     name: my_test
     mode: my_test
-    dataroot_LQ: /home/lzy/Downloads/EDVR-master/datasets/test_data
+    dataroot_LQ: datasets/test_data
     cache_data: False
     N_frames: 5
     padding: new_info
@@ -24,11 +24,11 @@ network_G:
   nframes: 5
   groups: 8
   front_RBs: 5
-  back_RBs: 40
+  back_RBs: 10
   predeblur: true
   HR_in: false
   w_TSA: true
 
 #### path
 path:
-  pretrain_model_G: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all_aug_RB40/models/30000_G.pth
+  pretrain_model_G: experiments/EDVR_train_all/models/235000_G.pth
