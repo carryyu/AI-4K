@@ -1,0 +1,1079 @@
+19-11-19 03:07:46.217 - INFO:   name: EDVR_train_all
+  use_tb_logger: False
+  model: video_base
+  distortion: sr
+  scale: 4
+  gpu_ids: [6, 7, 8, 9]
+  datasets:[
+    train:[
+      name: unlmdb
+      mode: unlmdb
+      interval_list: [1]
+      random_reverse: False
+      border_mode: False
+      dataroot_GT: /home/lzy/Downloads/EDVR-master/datasets/all_data/gt
+      dataroot_LQ: /home/lzy/Downloads/EDVR-master/datasets/all_data/input
+      cache_keys: None
+      N_frames: 5
+      use_shuffle: True
+      n_workers: 4
+      batch_size: 4
+      GT_size: 1200
+      LQ_size: 300
+      use_flip: True
+      use_rot: True
+      color: RGB
+      cache_data: False
+      phase: train
+      scale: 4
+      data_type: img
+    ]
+    val:[
+      name: REDS4
+      mode: video_test
+      dataroot_GT: /home/lzy/Downloads/EDVR-master/datasets/pngs/gt
+      dataroot_LQ: /home/lzy/Downloads/EDVR-master/datasets/pngs/input
+      cache_data: False
+      N_frames: 5
+      padding: new_info
+      phase: val
+      scale: 4
+      data_type: img
+    ]
+  ]
+  network_G:[
+    which_model_G: EDVR
+    nf: 64
+    nframes: 5
+    groups: 8
+    front_RBs: 5
+    back_RBs: 10
+    predeblur: True
+    HR_in: False
+    w_TSA: True
+    scale: 4
+  ]
+  path:[
+    pretrain_model_G: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all/models/215000_G.pth
+    strict_load: False
+    resume_state: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all/training_state/215000.state
+    root: /home/lzy/Downloads/EDVR-master
+    experiments_root: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all
+    models: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all/models
+    training_state: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all/training_state
+    log: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all
+    val_images: /home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all/val_images
+  ]
+  train:[
+    lr_G: 0.0004
+    lr_scheme: CosineAnnealingLR_Restart
+    beta1: 0.9
+    beta2: 0.99
+    niter: 600000
+    ft_tsa_only: 50000
+    warmup_iter: -1
+    T_period: [50000, 100000, 150000, 150000, 150000]
+    restarts: [50000, 150000, 300000, 450000]
+    restart_weights: [1, 1, 1, 1]
+    eta_min: 1e-07
+    pixel_criterion: psnr_ssim
+    pixel_weight: 1.0
+    val_freq: 5000.0
+    manual_seed: 0
+  ]
+  logger:[
+    print_freq: 50
+    save_checkpoint_freq: 5000.0
+  ]
+  is_train: True
+  dist: True
+
+19-11-19 03:07:46.218 - INFO: Random seed: 0
+19-11-19 03:07:46.222 - INFO: Temporal augmentation interval list: [1], with random reverse is False.
+19-11-19 03:08:07.007 - INFO: Dataset [MyDataset - unlmdb] is created.
+19-11-19 03:08:07.007 - INFO: Number of train images: 69,486, iters: 17,372
+19-11-19 03:08:07.007 - INFO: Total epochs needed: 1 for iters 600,000
+19-11-19 03:08:07.023 - INFO: Dataset [VideoTestDataset - REDS4] is created.
+19-11-19 03:08:07.023 - INFO: Number of val images in [REDS4]: 500
+19-11-19 03:08:10.675 - INFO: Network G structure: DistributedDataParallel, with parameters: 3,968,995
+19-11-19 03:08:10.676 - INFO: EDVR(
+  (pre_deblur): Predeblur_ResNet_Pyramid(
+    (conv_first): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (RB_L1_1): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (RB_L1_2): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (RB_L1_3): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (RB_L1_4): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (RB_L1_5): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (RB_L2_1): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (RB_L2_2): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (RB_L3_1): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (deblur_L2_conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (deblur_L3_conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (lrelu): LeakyReLU(negative_slope=0.1, inplace)
+  )
+  (conv_1x1): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+  (feature_extraction): Sequential(
+    (0): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (1): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (2): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (3): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (4): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (fea_L2_conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+  (fea_L2_conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (fea_L3_conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+  (fea_L3_conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pcd_align): PCD_Align(
+    (L3_offset_conv1): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L3_offset_conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L3_dcnpack): ModulatedDeformConvPack(
+      (conv_offset_mask): Conv2d(64, 216, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (L2_offset_conv1): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L2_offset_conv2): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L2_offset_conv3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L2_dcnpack): ModulatedDeformConvPack(
+      (conv_offset_mask): Conv2d(64, 216, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (L2_fea_conv): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L1_offset_conv1): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L1_offset_conv2): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L1_offset_conv3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (L1_dcnpack): ModulatedDeformConvPack(
+      (conv_offset_mask): Conv2d(64, 216, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (L1_fea_conv): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (cas_offset_conv1): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (cas_offset_conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (cas_dcnpack): ModulatedDeformConvPack(
+      (conv_offset_mask): Conv2d(64, 216, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (lrelu): LeakyReLU(negative_slope=0.1, inplace)
+  )
+  (tsa_fusion): TSA_Fusion(
+    (tAtt_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (tAtt_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (fea_fusion): Conv2d(320, 64, kernel_size=(1, 1), stride=(1, 1))
+    (sAtt_1): Conv2d(320, 64, kernel_size=(1, 1), stride=(1, 1))
+    (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+    (avgpool): AvgPool2d(kernel_size=3, stride=2, padding=1)
+    (sAtt_2): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+    (sAtt_3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (sAtt_4): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+    (sAtt_5): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (sAtt_L1): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+    (sAtt_L2): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (sAtt_L3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (sAtt_add_1): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+    (sAtt_add_2): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+    (lrelu): LeakyReLU(negative_slope=0.1, inplace)
+  )
+  (recon_trunk): Sequential(
+    (0): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (1): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (2): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (3): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (4): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (5): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (6): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (7): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (8): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (9): ResidualBlock_noBN(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (upconv1): Conv2d(64, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (upconv2): Conv2d(64, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pixel_shuffle): PixelShuffle(upscale_factor=2)
+  (HRconv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv_last): Conv2d(64, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (lrelu): LeakyReLU(negative_slope=0.1, inplace)
+)
+19-11-19 03:08:10.676 - INFO: Loading model for G [/home/lzy/Downloads/EDVR-master/experiments/EDVR_train_all/models/215000_G.pth] ...
+19-11-19 03:08:10.753 - INFO: Model [VideoBaseModel] is created.
+19-11-19 03:08:10.753 - INFO: Resuming training from epoch: 0, iter: 215000.
+19-11-19 03:08:10.783 - INFO: Start training from epoch: 0, iter: 215000
+19-11-19 03:10:42.740 - INFO: [epoch:  0, iter: 215,050, lr:(2.414e-04,2.414e-04,)] l_pix: 3.7968e-01 
+19-11-19 03:12:53.164 - INFO: [epoch:  0, iter: 215,100, lr:(2.412e-04,2.412e-04,)] l_pix: 6.2692e-01 
+19-11-19 03:15:00.474 - INFO: [epoch:  0, iter: 215,150, lr:(2.410e-04,2.410e-04,)] l_pix: 4.8313e-01 
+19-11-19 03:17:04.029 - INFO: [epoch:  0, iter: 215,200, lr:(2.408e-04,2.408e-04,)] l_pix: 6.9621e-01 
+19-11-19 03:19:08.924 - INFO: [epoch:  0, iter: 215,250, lr:(2.406e-04,2.406e-04,)] l_pix: 7.3883e-01 
+19-11-19 03:21:16.633 - INFO: [epoch:  0, iter: 215,300, lr:(2.404e-04,2.404e-04,)] l_pix: 4.3468e-01 
+19-11-19 03:23:07.843 - INFO: [epoch:  0, iter: 215,350, lr:(2.402e-04,2.402e-04,)] l_pix: 4.0508e-01 
+19-11-19 03:25:10.169 - INFO: [epoch:  0, iter: 215,400, lr:(2.400e-04,2.400e-04,)] l_pix: 3.7720e-01 
+19-11-19 03:27:13.949 - INFO: [epoch:  0, iter: 215,450, lr:(2.398e-04,2.398e-04,)] l_pix: 3.9646e-01 
+19-11-19 03:29:04.235 - INFO: [epoch:  0, iter: 215,500, lr:(2.396e-04,2.396e-04,)] l_pix: 4.9722e-01 
+19-11-19 03:30:52.101 - INFO: [epoch:  0, iter: 215,550, lr:(2.394e-04,2.394e-04,)] l_pix: 1.1963e-01 
+19-11-19 03:32:34.290 - INFO: [epoch:  0, iter: 215,600, lr:(2.392e-04,2.392e-04,)] l_pix: 3.7188e-01 
+19-11-19 03:34:18.634 - INFO: [epoch:  0, iter: 215,650, lr:(2.390e-04,2.390e-04,)] l_pix: 3.7290e-01 
+19-11-19 03:35:48.959 - INFO: [epoch:  0, iter: 215,700, lr:(2.388e-04,2.388e-04,)] l_pix: 3.4978e-01 
+19-11-19 03:37:04.681 - INFO: [epoch:  0, iter: 215,750, lr:(2.385e-04,2.385e-04,)] l_pix: 4.5571e-01 
+19-11-19 03:38:25.031 - INFO: [epoch:  0, iter: 215,800, lr:(2.383e-04,2.383e-04,)] l_pix: 5.1734e-01 
+19-11-19 03:39:46.673 - INFO: [epoch:  0, iter: 215,850, lr:(2.381e-04,2.381e-04,)] l_pix: 2.3470e-01 
+19-11-19 03:41:00.589 - INFO: [epoch:  0, iter: 215,900, lr:(2.379e-04,2.379e-04,)] l_pix: 2.7067e-01 
+19-11-19 03:42:16.489 - INFO: [epoch:  0, iter: 215,950, lr:(2.377e-04,2.377e-04,)] l_pix: 4.9626e-01 
+19-11-19 03:43:33.456 - INFO: [epoch:  0, iter: 216,000, lr:(2.375e-04,2.375e-04,)] l_pix: 4.5674e-01 
+19-11-19 03:44:50.519 - INFO: [epoch:  0, iter: 216,050, lr:(2.373e-04,2.373e-04,)] l_pix: 3.9774e-01 
+19-11-19 03:46:03.769 - INFO: [epoch:  0, iter: 216,100, lr:(2.371e-04,2.371e-04,)] l_pix: 4.3519e-01 
+19-11-19 03:47:18.052 - INFO: [epoch:  0, iter: 216,150, lr:(2.369e-04,2.369e-04,)] l_pix: 5.6730e-01 
+19-11-19 03:48:39.258 - INFO: [epoch:  0, iter: 216,200, lr:(2.367e-04,2.367e-04,)] l_pix: 4.5113e-01 
+19-11-19 03:49:52.480 - INFO: [epoch:  0, iter: 216,250, lr:(2.365e-04,2.365e-04,)] l_pix: 3.3326e-01 
+19-11-19 03:51:14.329 - INFO: [epoch:  0, iter: 216,300, lr:(2.363e-04,2.363e-04,)] l_pix: 5.0086e-01 
+19-11-19 03:52:28.650 - INFO: [epoch:  0, iter: 216,350, lr:(2.361e-04,2.361e-04,)] l_pix: 3.6677e-01 
+19-11-19 03:53:38.753 - INFO: [epoch:  0, iter: 216,400, lr:(2.359e-04,2.359e-04,)] l_pix: 3.9425e-01 
+19-11-19 03:54:51.270 - INFO: [epoch:  0, iter: 216,450, lr:(2.357e-04,2.357e-04,)] l_pix: 6.0597e-01 
+19-11-19 03:56:04.616 - INFO: [epoch:  0, iter: 216,500, lr:(2.355e-04,2.355e-04,)] l_pix: 5.8168e-01 
+19-11-19 03:57:22.237 - INFO: [epoch:  0, iter: 216,550, lr:(2.353e-04,2.353e-04,)] l_pix: 3.9073e-01 
+19-11-19 03:58:40.069 - INFO: [epoch:  0, iter: 216,600, lr:(2.350e-04,2.350e-04,)] l_pix: 3.3601e-01 
+19-11-19 03:59:59.497 - INFO: [epoch:  0, iter: 216,650, lr:(2.348e-04,2.348e-04,)] l_pix: 5.9495e-01 
+19-11-19 04:01:11.017 - INFO: [epoch:  0, iter: 216,700, lr:(2.346e-04,2.346e-04,)] l_pix: 4.9873e-01 
+19-11-19 04:02:24.725 - INFO: [epoch:  0, iter: 216,750, lr:(2.344e-04,2.344e-04,)] l_pix: 5.3453e-01 
+19-11-19 04:03:44.760 - INFO: [epoch:  0, iter: 216,800, lr:(2.342e-04,2.342e-04,)] l_pix: 6.6241e-01 
+19-11-19 04:05:02.274 - INFO: [epoch:  0, iter: 216,850, lr:(2.340e-04,2.340e-04,)] l_pix: 2.6266e-01 
+19-11-19 04:06:20.844 - INFO: [epoch:  0, iter: 216,900, lr:(2.338e-04,2.338e-04,)] l_pix: 2.5817e-01 
+19-11-19 04:07:38.919 - INFO: [epoch:  0, iter: 216,950, lr:(2.336e-04,2.336e-04,)] l_pix: 5.1241e-01 
+19-11-19 04:09:00.552 - INFO: [epoch:  0, iter: 217,000, lr:(2.334e-04,2.334e-04,)] l_pix: 4.8416e-01 
+19-11-19 04:10:16.529 - INFO: [epoch:  0, iter: 217,050, lr:(2.332e-04,2.332e-04,)] l_pix: 4.9304e-01 
+19-11-19 04:11:30.525 - INFO: [epoch:  0, iter: 217,100, lr:(2.330e-04,2.330e-04,)] l_pix: 5.6767e-01 
+19-11-19 04:12:43.109 - INFO: [epoch:  0, iter: 217,150, lr:(2.328e-04,2.328e-04,)] l_pix: 3.5954e-01 
+19-11-19 04:13:54.163 - INFO: [epoch:  0, iter: 217,200, lr:(2.326e-04,2.326e-04,)] l_pix: 5.6212e-01 
+19-11-19 04:15:24.902 - INFO: [epoch:  0, iter: 217,250, lr:(2.324e-04,2.324e-04,)] l_pix: 5.6341e-01 
+19-11-19 04:16:42.289 - INFO: [epoch:  0, iter: 217,300, lr:(2.322e-04,2.322e-04,)] l_pix: 4.6021e-01 
+19-11-19 04:18:05.469 - INFO: [epoch:  0, iter: 217,350, lr:(2.320e-04,2.320e-04,)] l_pix: 5.4353e-01 
+19-11-19 04:19:30.211 - INFO: [epoch:  0, iter: 217,400, lr:(2.317e-04,2.317e-04,)] l_pix: 5.4433e-01 
+19-11-19 04:20:44.220 - INFO: [epoch:  0, iter: 217,450, lr:(2.315e-04,2.315e-04,)] l_pix: 4.9540e-01 
+19-11-19 04:22:04.633 - INFO: [epoch:  0, iter: 217,500, lr:(2.313e-04,2.313e-04,)] l_pix: 5.5779e-01 
+19-11-19 04:23:25.864 - INFO: [epoch:  0, iter: 217,550, lr:(2.311e-04,2.311e-04,)] l_pix: 7.9252e-01 
+19-11-19 04:24:40.395 - INFO: [epoch:  0, iter: 217,600, lr:(2.309e-04,2.309e-04,)] l_pix: 3.6193e-01 
+19-11-19 04:26:05.633 - INFO: [epoch:  0, iter: 217,650, lr:(2.307e-04,2.307e-04,)] l_pix: 4.1110e-01 
+19-11-19 04:27:21.528 - INFO: [epoch:  0, iter: 217,700, lr:(2.305e-04,2.305e-04,)] l_pix: 4.1476e-01 
+19-11-19 04:28:38.703 - INFO: [epoch:  0, iter: 217,750, lr:(2.303e-04,2.303e-04,)] l_pix: 4.4989e-01 
+19-11-19 04:29:56.230 - INFO: [epoch:  0, iter: 217,800, lr:(2.301e-04,2.301e-04,)] l_pix: 2.5880e-01 
+19-11-19 04:31:09.403 - INFO: [epoch:  0, iter: 217,850, lr:(2.299e-04,2.299e-04,)] l_pix: 2.4941e-01 
+19-11-19 04:32:27.463 - INFO: [epoch:  0, iter: 217,900, lr:(2.297e-04,2.297e-04,)] l_pix: 4.0146e-01 
+19-11-19 04:33:39.765 - INFO: [epoch:  0, iter: 217,950, lr:(2.295e-04,2.295e-04,)] l_pix: 4.9433e-01 
+19-11-19 04:34:52.000 - INFO: [epoch:  0, iter: 218,000, lr:(2.293e-04,2.293e-04,)] l_pix: 4.9541e-01 
+19-11-19 04:36:09.281 - INFO: [epoch:  0, iter: 218,050, lr:(2.291e-04,2.291e-04,)] l_pix: 3.6173e-01 
+19-11-19 04:37:24.181 - INFO: [epoch:  0, iter: 218,100, lr:(2.288e-04,2.288e-04,)] l_pix: 3.5832e-01 
+19-11-19 04:38:36.929 - INFO: [epoch:  0, iter: 218,150, lr:(2.286e-04,2.286e-04,)] l_pix: 7.3212e-01 
+19-11-19 04:39:47.613 - INFO: [epoch:  0, iter: 218,200, lr:(2.284e-04,2.284e-04,)] l_pix: 5.5304e-01 
+19-11-19 04:41:01.587 - INFO: [epoch:  0, iter: 218,250, lr:(2.282e-04,2.282e-04,)] l_pix: 5.2450e-01 
+19-11-19 04:42:20.797 - INFO: [epoch:  0, iter: 218,300, lr:(2.280e-04,2.280e-04,)] l_pix: 3.2539e-01 
+19-11-19 04:43:38.086 - INFO: [epoch:  0, iter: 218,350, lr:(2.278e-04,2.278e-04,)] l_pix: 6.7052e-01 
+19-11-19 04:44:52.138 - INFO: [epoch:  0, iter: 218,400, lr:(2.276e-04,2.276e-04,)] l_pix: 5.2789e-01 
+19-11-19 04:46:06.074 - INFO: [epoch:  0, iter: 218,450, lr:(2.274e-04,2.274e-04,)] l_pix: 3.9769e-01 
+19-11-19 04:47:21.499 - INFO: [epoch:  0, iter: 218,500, lr:(2.272e-04,2.272e-04,)] l_pix: 2.9226e-01 
+19-11-19 04:48:49.201 - INFO: [epoch:  0, iter: 218,550, lr:(2.270e-04,2.270e-04,)] l_pix: 3.1105e-01 
+19-11-19 04:50:03.688 - INFO: [epoch:  0, iter: 218,600, lr:(2.268e-04,2.268e-04,)] l_pix: 3.4341e-01 
+19-11-19 04:51:18.072 - INFO: [epoch:  0, iter: 218,650, lr:(2.266e-04,2.266e-04,)] l_pix: 7.4831e-01 
+19-11-19 04:52:29.692 - INFO: [epoch:  0, iter: 218,700, lr:(2.264e-04,2.264e-04,)] l_pix: 5.2901e-01 
+19-11-19 04:53:50.971 - INFO: [epoch:  0, iter: 218,750, lr:(2.262e-04,2.262e-04,)] l_pix: 4.0865e-01 
+19-11-19 04:55:09.081 - INFO: [epoch:  0, iter: 218,800, lr:(2.259e-04,2.259e-04,)] l_pix: 2.5631e-01 
+19-11-19 04:56:28.796 - INFO: [epoch:  0, iter: 218,850, lr:(2.257e-04,2.257e-04,)] l_pix: 3.9794e-01 
+19-11-19 04:57:43.708 - INFO: [epoch:  0, iter: 218,900, lr:(2.255e-04,2.255e-04,)] l_pix: 5.1935e-01 
+19-11-19 04:58:56.021 - INFO: [epoch:  0, iter: 218,950, lr:(2.253e-04,2.253e-04,)] l_pix: 4.8350e-01 
+19-11-19 05:00:10.113 - INFO: [epoch:  0, iter: 219,000, lr:(2.251e-04,2.251e-04,)] l_pix: 4.5675e-01 
+19-11-19 05:01:29.571 - INFO: [epoch:  0, iter: 219,050, lr:(2.249e-04,2.249e-04,)] l_pix: 4.5020e-01 
+19-11-19 05:02:42.986 - INFO: [epoch:  0, iter: 219,100, lr:(2.247e-04,2.247e-04,)] l_pix: 4.1171e-01 
+19-11-19 05:03:59.931 - INFO: [epoch:  0, iter: 219,150, lr:(2.245e-04,2.245e-04,)] l_pix: 6.1528e-01 
+19-11-19 05:05:31.077 - INFO: [epoch:  0, iter: 219,200, lr:(2.243e-04,2.243e-04,)] l_pix: 6.3886e-01 
+19-11-19 05:06:46.438 - INFO: [epoch:  0, iter: 219,250, lr:(2.241e-04,2.241e-04,)] l_pix: 4.5334e-01 
+19-11-19 05:08:03.223 - INFO: [epoch:  0, iter: 219,300, lr:(2.239e-04,2.239e-04,)] l_pix: 6.8458e-01 
+19-11-19 05:09:22.460 - INFO: [epoch:  0, iter: 219,350, lr:(2.237e-04,2.237e-04,)] l_pix: 3.8790e-01 
+19-11-19 05:10:39.750 - INFO: [epoch:  0, iter: 219,400, lr:(2.235e-04,2.235e-04,)] l_pix: 3.4806e-01 
+19-11-19 05:12:04.843 - INFO: [epoch:  0, iter: 219,450, lr:(2.232e-04,2.232e-04,)] l_pix: 5.9431e-02 
+19-11-19 05:13:29.963 - INFO: [epoch:  0, iter: 219,500, lr:(2.230e-04,2.230e-04,)] l_pix: 5.1003e-01 
+19-11-19 05:14:45.332 - INFO: [epoch:  0, iter: 219,550, lr:(2.228e-04,2.228e-04,)] l_pix: 6.2992e-01 
+19-11-19 05:16:04.486 - INFO: [epoch:  0, iter: 219,600, lr:(2.226e-04,2.226e-04,)] l_pix: 2.2827e-01 
+19-11-19 05:17:19.063 - INFO: [epoch:  0, iter: 219,650, lr:(2.224e-04,2.224e-04,)] l_pix: 3.7653e-01 
+19-11-19 05:18:42.493 - INFO: [epoch:  0, iter: 219,700, lr:(2.222e-04,2.222e-04,)] l_pix: 4.1031e-01 
+19-11-19 05:19:54.930 - INFO: [epoch:  0, iter: 219,750, lr:(2.220e-04,2.220e-04,)] l_pix: 3.5335e-01 
+19-11-19 05:21:16.363 - INFO: [epoch:  0, iter: 219,800, lr:(2.218e-04,2.218e-04,)] l_pix: 3.7486e-01 
+19-11-19 05:22:35.438 - INFO: [epoch:  0, iter: 219,850, lr:(2.216e-04,2.216e-04,)] l_pix: 4.9886e-01 
+19-11-19 05:23:45.893 - INFO: [epoch:  0, iter: 219,900, lr:(2.214e-04,2.214e-04,)] l_pix: 6.1521e-01 
+19-11-19 05:25:15.049 - INFO: [epoch:  0, iter: 219,950, lr:(2.212e-04,2.212e-04,)] l_pix: 4.0866e-01 
+19-11-19 05:26:28.447 - INFO: [epoch:  0, iter: 220,000, lr:(2.210e-04,2.210e-04,)] l_pix: 5.3567e-01 
+19-11-19 06:56:24.268 - INFO: # Validation # PSNR: 3.6004e+01: 10091373: 3.8236e+01 10099858: 4.0112e+01 10126908: 3.8622e+01 10272022: 3.1499e+01 10306321: 3.1548e+01
+19-11-19 06:56:24.269 - INFO: Saving models and training states.
+19-11-19 06:57:48.445 - INFO: [epoch:  0, iter: 220,050, lr:(2.207e-04,2.207e-04,)] l_pix: 2.4832e-01 
+19-11-19 06:59:11.254 - INFO: [epoch:  0, iter: 220,100, lr:(2.205e-04,2.205e-04,)] l_pix: 3.4826e-01 
+19-11-19 07:00:22.884 - INFO: [epoch:  0, iter: 220,150, lr:(2.203e-04,2.203e-04,)] l_pix: 2.3868e-01 
+19-11-19 07:01:40.963 - INFO: [epoch:  0, iter: 220,200, lr:(2.201e-04,2.201e-04,)] l_pix: 8.0452e-01 
+19-11-19 07:02:54.721 - INFO: [epoch:  0, iter: 220,250, lr:(2.199e-04,2.199e-04,)] l_pix: 5.3654e-01 
+19-11-19 07:04:03.124 - INFO: [epoch:  0, iter: 220,300, lr:(2.197e-04,2.197e-04,)] l_pix: 3.6804e-01 
+19-11-19 07:05:23.083 - INFO: [epoch:  0, iter: 220,350, lr:(2.195e-04,2.195e-04,)] l_pix: 1.5977e-01 
+19-11-19 07:06:38.095 - INFO: [epoch:  0, iter: 220,400, lr:(2.193e-04,2.193e-04,)] l_pix: 5.0293e-01 
+19-11-19 07:07:57.213 - INFO: [epoch:  0, iter: 220,450, lr:(2.191e-04,2.191e-04,)] l_pix: 2.8198e-01 
+19-11-19 07:09:23.479 - INFO: [epoch:  0, iter: 220,500, lr:(2.189e-04,2.189e-04,)] l_pix: 6.1961e-01 
+19-11-19 07:10:35.694 - INFO: [epoch:  0, iter: 220,550, lr:(2.187e-04,2.187e-04,)] l_pix: 2.6591e-01 
+19-11-19 07:11:48.705 - INFO: [epoch:  0, iter: 220,600, lr:(2.185e-04,2.185e-04,)] l_pix: 4.0392e-01 
+19-11-19 07:13:04.383 - INFO: [epoch:  0, iter: 220,650, lr:(2.182e-04,2.182e-04,)] l_pix: 3.8020e-01 
+19-11-19 07:14:20.634 - INFO: [epoch:  0, iter: 220,700, lr:(2.180e-04,2.180e-04,)] l_pix: 3.8210e-01 
+19-11-19 07:15:38.832 - INFO: [epoch:  0, iter: 220,750, lr:(2.178e-04,2.178e-04,)] l_pix: 4.3843e-01 
+19-11-19 07:16:56.894 - INFO: [epoch:  0, iter: 220,800, lr:(2.176e-04,2.176e-04,)] l_pix: 4.0928e-01 
+19-11-19 07:18:17.492 - INFO: [epoch:  0, iter: 220,850, lr:(2.174e-04,2.174e-04,)] l_pix: 1.0519e+00 
+19-11-19 07:19:37.091 - INFO: [epoch:  0, iter: 220,900, lr:(2.172e-04,2.172e-04,)] l_pix: 3.9378e-01 
+19-11-19 07:21:01.596 - INFO: [epoch:  0, iter: 220,950, lr:(2.170e-04,2.170e-04,)] l_pix: 4.0895e-01 
+19-11-19 07:22:28.590 - INFO: [epoch:  0, iter: 221,000, lr:(2.168e-04,2.168e-04,)] l_pix: 9.4089e-01 
+19-11-19 07:23:54.773 - INFO: [epoch:  0, iter: 221,050, lr:(2.166e-04,2.166e-04,)] l_pix: 4.5429e-01 
+19-11-19 07:25:27.771 - INFO: [epoch:  0, iter: 221,100, lr:(2.164e-04,2.164e-04,)] l_pix: 4.1468e-01 
+19-11-19 07:26:56.639 - INFO: [epoch:  0, iter: 221,150, lr:(2.162e-04,2.162e-04,)] l_pix: 6.3035e-01 
+19-11-19 07:28:17.421 - INFO: [epoch:  0, iter: 221,200, lr:(2.160e-04,2.160e-04,)] l_pix: 3.3006e-01 
+19-11-19 07:29:37.700 - INFO: [epoch:  0, iter: 221,250, lr:(2.157e-04,2.157e-04,)] l_pix: 3.9986e-01 
+19-11-19 07:30:51.764 - INFO: [epoch:  0, iter: 221,300, lr:(2.155e-04,2.155e-04,)] l_pix: 4.5833e-01 
+19-11-19 07:32:04.290 - INFO: [epoch:  0, iter: 221,350, lr:(2.153e-04,2.153e-04,)] l_pix: 6.5882e-01 
+19-11-19 07:33:29.454 - INFO: [epoch:  0, iter: 221,400, lr:(2.151e-04,2.151e-04,)] l_pix: 3.3944e-01 
+19-11-19 07:34:55.030 - INFO: [epoch:  0, iter: 221,450, lr:(2.149e-04,2.149e-04,)] l_pix: 5.6502e-01 
+19-11-19 07:36:15.204 - INFO: [epoch:  0, iter: 221,500, lr:(2.147e-04,2.147e-04,)] l_pix: 7.3477e-01 
+19-11-19 07:37:35.760 - INFO: [epoch:  0, iter: 221,550, lr:(2.145e-04,2.145e-04,)] l_pix: 4.4816e-01 
+19-11-19 07:39:09.407 - INFO: [epoch:  0, iter: 221,600, lr:(2.143e-04,2.143e-04,)] l_pix: 2.4199e-01 
+19-11-19 07:40:40.626 - INFO: [epoch:  0, iter: 221,650, lr:(2.141e-04,2.141e-04,)] l_pix: 5.2303e-01 
+19-11-19 07:42:08.811 - INFO: [epoch:  0, iter: 221,700, lr:(2.139e-04,2.139e-04,)] l_pix: 3.8973e-01 
+19-11-19 07:43:44.210 - INFO: [epoch:  0, iter: 221,750, lr:(2.137e-04,2.137e-04,)] l_pix: 3.4334e-01 
+19-11-19 07:45:16.400 - INFO: [epoch:  0, iter: 221,800, lr:(2.134e-04,2.134e-04,)] l_pix: 4.6710e-01 
+19-11-19 07:46:39.046 - INFO: [epoch:  0, iter: 221,850, lr:(2.132e-04,2.132e-04,)] l_pix: 3.0381e-01 
+19-11-19 07:47:54.505 - INFO: [epoch:  0, iter: 221,900, lr:(2.130e-04,2.130e-04,)] l_pix: 4.6270e-01 
+19-11-19 07:49:16.867 - INFO: [epoch:  0, iter: 221,950, lr:(2.128e-04,2.128e-04,)] l_pix: 5.7599e-01 
+19-11-19 07:50:41.658 - INFO: [epoch:  0, iter: 222,000, lr:(2.126e-04,2.126e-04,)] l_pix: 5.6249e-01 
+19-11-19 07:52:17.235 - INFO: [epoch:  0, iter: 222,050, lr:(2.124e-04,2.124e-04,)] l_pix: 4.2128e-01 
+19-11-19 07:53:56.768 - INFO: [epoch:  0, iter: 222,100, lr:(2.122e-04,2.122e-04,)] l_pix: 3.1485e-01 
+19-11-19 07:55:19.100 - INFO: [epoch:  0, iter: 222,150, lr:(2.120e-04,2.120e-04,)] l_pix: 4.9515e-01 
+19-11-19 07:56:42.500 - INFO: [epoch:  0, iter: 222,200, lr:(2.118e-04,2.118e-04,)] l_pix: 4.3672e-01 
+19-11-19 07:58:15.429 - INFO: [epoch:  0, iter: 222,250, lr:(2.116e-04,2.116e-04,)] l_pix: 4.7834e-01 
+19-11-19 07:59:49.147 - INFO: [epoch:  0, iter: 222,300, lr:(2.114e-04,2.114e-04,)] l_pix: 6.2668e-01 
+19-11-19 08:01:26.183 - INFO: [epoch:  0, iter: 222,350, lr:(2.111e-04,2.111e-04,)] l_pix: 5.0708e-01 
+19-11-19 08:02:50.312 - INFO: [epoch:  0, iter: 222,400, lr:(2.109e-04,2.109e-04,)] l_pix: 2.8845e-01 
+19-11-19 08:04:20.116 - INFO: [epoch:  0, iter: 222,450, lr:(2.107e-04,2.107e-04,)] l_pix: 6.9004e-01 
+19-11-19 08:05:45.625 - INFO: [epoch:  0, iter: 222,500, lr:(2.105e-04,2.105e-04,)] l_pix: 4.3344e-01 
+19-11-19 08:07:09.821 - INFO: [epoch:  0, iter: 222,550, lr:(2.103e-04,2.103e-04,)] l_pix: 6.3577e-01 
+19-11-19 08:08:40.113 - INFO: [epoch:  0, iter: 222,600, lr:(2.101e-04,2.101e-04,)] l_pix: 9.6105e-01 
+19-11-19 08:10:06.171 - INFO: [epoch:  0, iter: 222,650, lr:(2.099e-04,2.099e-04,)] l_pix: 4.4782e-01 
+19-11-19 08:11:24.729 - INFO: [epoch:  0, iter: 222,700, lr:(2.097e-04,2.097e-04,)] l_pix: 3.0044e-01 
+19-11-19 08:12:48.476 - INFO: [epoch:  0, iter: 222,750, lr:(2.095e-04,2.095e-04,)] l_pix: 7.4272e-01 
+19-11-19 08:14:09.327 - INFO: [epoch:  0, iter: 222,800, lr:(2.093e-04,2.093e-04,)] l_pix: 6.2886e-01 
+19-11-19 08:15:26.644 - INFO: [epoch:  0, iter: 222,850, lr:(2.091e-04,2.091e-04,)] l_pix: 5.7752e-01 
+19-11-19 08:16:49.378 - INFO: [epoch:  0, iter: 222,900, lr:(2.088e-04,2.088e-04,)] l_pix: 3.8079e-01 
+19-11-19 08:18:14.355 - INFO: [epoch:  0, iter: 222,950, lr:(2.086e-04,2.086e-04,)] l_pix: 3.6116e-01 
+19-11-19 08:19:35.358 - INFO: [epoch:  0, iter: 223,000, lr:(2.084e-04,2.084e-04,)] l_pix: 3.9017e-01 
+19-11-19 08:20:59.162 - INFO: [epoch:  0, iter: 223,050, lr:(2.082e-04,2.082e-04,)] l_pix: 4.4809e-01 
+19-11-19 08:22:29.604 - INFO: [epoch:  0, iter: 223,100, lr:(2.080e-04,2.080e-04,)] l_pix: 2.9482e-01 
+19-11-19 08:24:01.326 - INFO: [epoch:  0, iter: 223,150, lr:(2.078e-04,2.078e-04,)] l_pix: 5.5899e-01 
+19-11-19 08:25:30.785 - INFO: [epoch:  0, iter: 223,200, lr:(2.076e-04,2.076e-04,)] l_pix: 3.7044e-01 
+19-11-19 08:26:59.576 - INFO: [epoch:  0, iter: 223,250, lr:(2.074e-04,2.074e-04,)] l_pix: 4.8189e-01 
+19-11-19 08:28:20.626 - INFO: [epoch:  0, iter: 223,300, lr:(2.072e-04,2.072e-04,)] l_pix: 7.2310e-01 
+19-11-19 08:29:47.021 - INFO: [epoch:  0, iter: 223,350, lr:(2.070e-04,2.070e-04,)] l_pix: 3.1870e-01 
+19-11-19 08:31:19.848 - INFO: [epoch:  0, iter: 223,400, lr:(2.068e-04,2.068e-04,)] l_pix: 5.2118e-01 
+19-11-19 08:32:35.264 - INFO: [epoch:  0, iter: 223,450, lr:(2.065e-04,2.065e-04,)] l_pix: 4.1958e-01 
+19-11-19 08:34:02.156 - INFO: [epoch:  0, iter: 223,500, lr:(2.063e-04,2.063e-04,)] l_pix: 7.7459e-01 
+19-11-19 08:35:26.836 - INFO: [epoch:  0, iter: 223,550, lr:(2.061e-04,2.061e-04,)] l_pix: 4.1152e-01 
+19-11-19 08:36:51.932 - INFO: [epoch:  0, iter: 223,600, lr:(2.059e-04,2.059e-04,)] l_pix: 9.4693e-01 
+19-11-19 08:38:20.021 - INFO: [epoch:  0, iter: 223,650, lr:(2.057e-04,2.057e-04,)] l_pix: 5.1392e-01 
+19-11-19 08:39:40.956 - INFO: [epoch:  0, iter: 223,700, lr:(2.055e-04,2.055e-04,)] l_pix: 2.8170e-01 
+19-11-19 08:41:05.976 - INFO: [epoch:  0, iter: 223,750, lr:(2.053e-04,2.053e-04,)] l_pix: 4.2448e-01 
+19-11-19 08:42:31.913 - INFO: [epoch:  0, iter: 223,800, lr:(2.051e-04,2.051e-04,)] l_pix: 8.2461e-01 
+19-11-19 08:43:59.753 - INFO: [epoch:  0, iter: 223,850, lr:(2.049e-04,2.049e-04,)] l_pix: 3.2160e-01 
+19-11-19 08:45:26.620 - INFO: [epoch:  0, iter: 223,900, lr:(2.047e-04,2.047e-04,)] l_pix: 4.1549e-01 
+19-11-19 08:46:55.465 - INFO: [epoch:  0, iter: 223,950, lr:(2.045e-04,2.045e-04,)] l_pix: 9.3891e-01 
+19-11-19 08:48:20.455 - INFO: [epoch:  0, iter: 224,000, lr:(2.042e-04,2.042e-04,)] l_pix: 5.6124e-01 
+19-11-19 08:49:30.151 - INFO: [epoch:  0, iter: 224,050, lr:(2.040e-04,2.040e-04,)] l_pix: 4.4787e-01 
+19-11-19 08:50:44.734 - INFO: [epoch:  0, iter: 224,100, lr:(2.038e-04,2.038e-04,)] l_pix: 4.1620e-01 
+19-11-19 08:52:09.325 - INFO: [epoch:  0, iter: 224,150, lr:(2.036e-04,2.036e-04,)] l_pix: 2.7556e-01 
+19-11-19 08:53:20.315 - INFO: [epoch:  0, iter: 224,200, lr:(2.034e-04,2.034e-04,)] l_pix: 3.9703e-01 
+19-11-19 08:54:46.172 - INFO: [epoch:  0, iter: 224,250, lr:(2.032e-04,2.032e-04,)] l_pix: 6.0757e-01 
+19-11-19 08:56:11.469 - INFO: [epoch:  0, iter: 224,300, lr:(2.030e-04,2.030e-04,)] l_pix: 2.7571e-01 
+19-11-19 08:57:38.211 - INFO: [epoch:  0, iter: 224,350, lr:(2.028e-04,2.028e-04,)] l_pix: 6.3769e-01 
+19-11-19 08:58:56.021 - INFO: [epoch:  0, iter: 224,400, lr:(2.026e-04,2.026e-04,)] l_pix: 6.6246e-01 
+19-11-19 09:00:27.460 - INFO: [epoch:  0, iter: 224,450, lr:(2.024e-04,2.024e-04,)] l_pix: 5.8854e-01 
+19-11-19 09:01:49.972 - INFO: [epoch:  0, iter: 224,500, lr:(2.021e-04,2.021e-04,)] l_pix: 4.5616e-01 
+19-11-19 09:03:20.944 - INFO: [epoch:  0, iter: 224,550, lr:(2.019e-04,2.019e-04,)] l_pix: 3.3520e-01 
+19-11-19 09:04:40.828 - INFO: [epoch:  0, iter: 224,600, lr:(2.017e-04,2.017e-04,)] l_pix: 3.8703e-01 
+19-11-19 09:06:12.923 - INFO: [epoch:  0, iter: 224,650, lr:(2.015e-04,2.015e-04,)] l_pix: 6.7646e-01 
+19-11-19 09:07:35.157 - INFO: [epoch:  0, iter: 224,700, lr:(2.013e-04,2.013e-04,)] l_pix: 3.3553e-01 
+19-11-19 09:08:55.989 - INFO: [epoch:  0, iter: 224,750, lr:(2.011e-04,2.011e-04,)] l_pix: 3.1625e-01 
+19-11-19 09:10:20.811 - INFO: [epoch:  0, iter: 224,800, lr:(2.009e-04,2.009e-04,)] l_pix: 3.5796e-01 
+19-11-19 09:11:40.684 - INFO: [epoch:  0, iter: 224,850, lr:(2.007e-04,2.007e-04,)] l_pix: 1.8563e-01 
+19-11-19 09:13:02.401 - INFO: [epoch:  0, iter: 224,900, lr:(2.005e-04,2.005e-04,)] l_pix: 4.4045e-01 
+19-11-19 09:14:22.713 - INFO: [epoch:  0, iter: 224,950, lr:(2.003e-04,2.003e-04,)] l_pix: 5.4067e-01 
+19-11-19 09:15:50.562 - INFO: [epoch:  0, iter: 225,000, lr:(2.001e-04,2.001e-04,)] l_pix: 5.6235e-01 
+19-11-19 10:51:29.094 - INFO: # Validation # PSNR: 3.6056e+01: 10091373: 3.8202e+01 10099858: 4.0132e+01 10126908: 3.8652e+01 10272022: 3.1595e+01 10306321: 3.1697e+01
+19-11-19 10:51:29.095 - INFO: Saving models and training states.
+19-11-19 10:52:50.454 - INFO: [epoch:  0, iter: 225,050, lr:(1.998e-04,1.998e-04,)] l_pix: 5.5500e-01 
+19-11-19 10:54:02.374 - INFO: [epoch:  0, iter: 225,100, lr:(1.996e-04,1.996e-04,)] l_pix: 4.1926e-01 
+19-11-19 10:55:17.253 - INFO: [epoch:  0, iter: 225,150, lr:(1.994e-04,1.994e-04,)] l_pix: 7.9315e-01 
+19-11-19 10:56:39.451 - INFO: [epoch:  0, iter: 225,200, lr:(1.992e-04,1.992e-04,)] l_pix: 5.6065e-01 
+19-11-19 10:58:03.554 - INFO: [epoch:  0, iter: 225,250, lr:(1.990e-04,1.990e-04,)] l_pix: 6.2160e-01 
+19-11-19 10:59:27.630 - INFO: [epoch:  0, iter: 225,300, lr:(1.988e-04,1.988e-04,)] l_pix: 3.0727e-01 
+19-11-19 11:00:44.124 - INFO: [epoch:  0, iter: 225,350, lr:(1.986e-04,1.986e-04,)] l_pix: 4.1752e-01 
+19-11-19 11:01:57.994 - INFO: [epoch:  0, iter: 225,400, lr:(1.984e-04,1.984e-04,)] l_pix: 6.7334e-01 
+19-11-19 11:03:17.356 - INFO: [epoch:  0, iter: 225,450, lr:(1.982e-04,1.982e-04,)] l_pix: 4.1552e-01 
+19-11-19 11:04:35.717 - INFO: [epoch:  0, iter: 225,500, lr:(1.980e-04,1.980e-04,)] l_pix: 2.6420e-01 
+19-11-19 11:06:07.293 - INFO: [epoch:  0, iter: 225,550, lr:(1.978e-04,1.978e-04,)] l_pix: 4.9701e-01 
+19-11-19 11:07:31.092 - INFO: [epoch:  0, iter: 225,600, lr:(1.975e-04,1.975e-04,)] l_pix: 6.1071e-01 
+19-11-19 11:09:00.281 - INFO: [epoch:  0, iter: 225,650, lr:(1.973e-04,1.973e-04,)] l_pix: 3.9593e-01 
+19-11-19 11:10:20.574 - INFO: [epoch:  0, iter: 225,700, lr:(1.971e-04,1.971e-04,)] l_pix: 4.7180e-01 
+19-11-19 11:11:48.868 - INFO: [epoch:  0, iter: 225,750, lr:(1.969e-04,1.969e-04,)] l_pix: 5.0413e-01 
+19-11-19 11:13:04.673 - INFO: [epoch:  0, iter: 225,800, lr:(1.967e-04,1.967e-04,)] l_pix: 3.8645e-01 
+19-11-19 11:14:19.496 - INFO: [epoch:  0, iter: 225,850, lr:(1.965e-04,1.965e-04,)] l_pix: 3.6408e-01 
+19-11-19 11:15:42.104 - INFO: [epoch:  0, iter: 225,900, lr:(1.963e-04,1.963e-04,)] l_pix: 4.3331e-01 
+19-11-19 11:17:11.096 - INFO: [epoch:  0, iter: 225,950, lr:(1.961e-04,1.961e-04,)] l_pix: 6.4265e-01 
+19-11-19 11:18:34.892 - INFO: [epoch:  0, iter: 226,000, lr:(1.959e-04,1.959e-04,)] l_pix: 4.9910e-01 
+19-11-19 11:19:54.572 - INFO: [epoch:  0, iter: 226,050, lr:(1.957e-04,1.957e-04,)] l_pix: 5.5138e-01 
+19-11-19 11:21:23.032 - INFO: [epoch:  0, iter: 226,100, lr:(1.954e-04,1.954e-04,)] l_pix: 5.2923e-01 
+19-11-19 11:22:45.120 - INFO: [epoch:  0, iter: 226,150, lr:(1.952e-04,1.952e-04,)] l_pix: 2.8800e-01 
+19-11-19 11:23:58.126 - INFO: [epoch:  0, iter: 226,200, lr:(1.950e-04,1.950e-04,)] l_pix: 4.1717e-01 
+19-11-19 11:25:23.018 - INFO: [epoch:  0, iter: 226,250, lr:(1.948e-04,1.948e-04,)] l_pix: 5.1238e-01 
+19-11-19 11:26:49.438 - INFO: [epoch:  0, iter: 226,300, lr:(1.946e-04,1.946e-04,)] l_pix: 5.2214e-01 
+19-11-19 11:28:18.378 - INFO: [epoch:  0, iter: 226,350, lr:(1.944e-04,1.944e-04,)] l_pix: 4.9536e-01 
+19-11-19 11:29:44.630 - INFO: [epoch:  0, iter: 226,400, lr:(1.942e-04,1.942e-04,)] l_pix: 4.1467e-01 
+19-11-19 11:31:07.426 - INFO: [epoch:  0, iter: 226,450, lr:(1.940e-04,1.940e-04,)] l_pix: 8.5001e-01 
+19-11-19 11:32:25.930 - INFO: [epoch:  0, iter: 226,500, lr:(1.938e-04,1.938e-04,)] l_pix: 5.4135e-01 
+19-11-19 11:33:43.046 - INFO: [epoch:  0, iter: 226,550, lr:(1.936e-04,1.936e-04,)] l_pix: 5.0225e-01 
+19-11-19 11:34:58.267 - INFO: [epoch:  0, iter: 226,600, lr:(1.934e-04,1.934e-04,)] l_pix: 4.2893e-01 
+19-11-19 11:36:18.837 - INFO: [epoch:  0, iter: 226,650, lr:(1.931e-04,1.931e-04,)] l_pix: 3.3917e-01 
+19-11-19 11:37:50.799 - INFO: [epoch:  0, iter: 226,700, lr:(1.929e-04,1.929e-04,)] l_pix: 5.6411e-01 
+19-11-19 11:39:16.892 - INFO: [epoch:  0, iter: 226,750, lr:(1.927e-04,1.927e-04,)] l_pix: 3.1015e-01 
+19-11-19 11:40:33.098 - INFO: [epoch:  0, iter: 226,800, lr:(1.925e-04,1.925e-04,)] l_pix: 3.4568e-01 
+19-11-19 11:41:49.862 - INFO: [epoch:  0, iter: 226,850, lr:(1.923e-04,1.923e-04,)] l_pix: 5.3802e-01 
+19-11-19 11:43:09.146 - INFO: [epoch:  0, iter: 226,900, lr:(1.921e-04,1.921e-04,)] l_pix: 5.6423e-01 
+19-11-19 11:44:26.252 - INFO: [epoch:  0, iter: 226,950, lr:(1.919e-04,1.919e-04,)] l_pix: 2.8651e-01 
+19-11-19 11:45:54.047 - INFO: [epoch:  0, iter: 227,000, lr:(1.917e-04,1.917e-04,)] l_pix: 6.0902e-01 
+19-11-19 11:47:09.808 - INFO: [epoch:  0, iter: 227,050, lr:(1.915e-04,1.915e-04,)] l_pix: 4.1545e-01 
+19-11-19 11:48:31.937 - INFO: [epoch:  0, iter: 227,100, lr:(1.913e-04,1.913e-04,)] l_pix: 5.9604e-01 
+19-11-19 11:49:49.348 - INFO: [epoch:  0, iter: 227,150, lr:(1.911e-04,1.911e-04,)] l_pix: 7.1332e-01 
+19-11-19 11:51:17.613 - INFO: [epoch:  0, iter: 227,200, lr:(1.908e-04,1.908e-04,)] l_pix: 3.6576e-01 
+19-11-19 11:52:29.452 - INFO: [epoch:  0, iter: 227,250, lr:(1.906e-04,1.906e-04,)] l_pix: 6.4038e-01 
+19-11-19 11:53:41.972 - INFO: [epoch:  0, iter: 227,300, lr:(1.904e-04,1.904e-04,)] l_pix: 3.0295e-01 
+19-11-19 11:55:02.666 - INFO: [epoch:  0, iter: 227,350, lr:(1.902e-04,1.902e-04,)] l_pix: 4.4092e-01 
+19-11-19 11:56:25.025 - INFO: [epoch:  0, iter: 227,400, lr:(1.900e-04,1.900e-04,)] l_pix: 5.0182e-01 
+19-11-19 11:57:48.675 - INFO: [epoch:  0, iter: 227,450, lr:(1.898e-04,1.898e-04,)] l_pix: 7.0044e-01 
+19-11-19 11:59:12.610 - INFO: [epoch:  0, iter: 227,500, lr:(1.896e-04,1.896e-04,)] l_pix: 3.5060e-01 
+19-11-19 12:00:34.844 - INFO: [epoch:  0, iter: 227,550, lr:(1.894e-04,1.894e-04,)] l_pix: 3.6538e-01 
+19-11-19 12:02:01.467 - INFO: [epoch:  0, iter: 227,600, lr:(1.892e-04,1.892e-04,)] l_pix: 5.4210e-01 
+19-11-19 12:03:24.953 - INFO: [epoch:  0, iter: 227,650, lr:(1.890e-04,1.890e-04,)] l_pix: 5.0818e-01 
+19-11-19 12:04:42.262 - INFO: [epoch:  0, iter: 227,700, lr:(1.888e-04,1.888e-04,)] l_pix: 5.2589e-01 
+19-11-19 12:06:00.951 - INFO: [epoch:  0, iter: 227,750, lr:(1.885e-04,1.885e-04,)] l_pix: 4.2784e-01 
+19-11-19 12:07:26.837 - INFO: [epoch:  0, iter: 227,800, lr:(1.883e-04,1.883e-04,)] l_pix: 8.6244e-01 
+19-11-19 12:08:45.284 - INFO: [epoch:  0, iter: 227,850, lr:(1.881e-04,1.881e-04,)] l_pix: 7.3479e-01 
+19-11-19 12:10:01.027 - INFO: [epoch:  0, iter: 227,900, lr:(1.879e-04,1.879e-04,)] l_pix: 5.8744e-01 
+19-11-19 12:11:20.002 - INFO: [epoch:  0, iter: 227,950, lr:(1.877e-04,1.877e-04,)] l_pix: 4.5600e-01 
+19-11-19 12:12:43.530 - INFO: [epoch:  0, iter: 228,000, lr:(1.875e-04,1.875e-04,)] l_pix: 8.6072e-01 
+19-11-19 12:14:08.918 - INFO: [epoch:  0, iter: 228,050, lr:(1.873e-04,1.873e-04,)] l_pix: 2.5141e-01 
+19-11-19 12:15:29.786 - INFO: [epoch:  0, iter: 228,100, lr:(1.871e-04,1.871e-04,)] l_pix: 4.8699e-01 
+19-11-19 12:16:57.657 - INFO: [epoch:  0, iter: 228,150, lr:(1.869e-04,1.869e-04,)] l_pix: 5.0849e-01 
+19-11-19 12:18:19.869 - INFO: [epoch:  0, iter: 228,200, lr:(1.867e-04,1.867e-04,)] l_pix: 3.6366e-01 
+19-11-19 12:19:54.416 - INFO: [epoch:  0, iter: 228,250, lr:(1.865e-04,1.865e-04,)] l_pix: 2.8438e-01 
+19-11-19 12:21:22.611 - INFO: [epoch:  0, iter: 228,300, lr:(1.862e-04,1.862e-04,)] l_pix: 3.8614e-01 
+19-11-19 12:22:37.617 - INFO: [epoch:  0, iter: 228,350, lr:(1.860e-04,1.860e-04,)] l_pix: 3.7238e-01 
+19-11-19 12:23:52.719 - INFO: [epoch:  0, iter: 228,400, lr:(1.858e-04,1.858e-04,)] l_pix: 2.1959e-01 
+19-11-19 12:25:18.041 - INFO: [epoch:  0, iter: 228,450, lr:(1.856e-04,1.856e-04,)] l_pix: 4.4144e-01 
+19-11-19 12:26:50.181 - INFO: [epoch:  0, iter: 228,500, lr:(1.854e-04,1.854e-04,)] l_pix: 6.5967e-01 
+19-11-19 12:28:09.095 - INFO: [epoch:  0, iter: 228,550, lr:(1.852e-04,1.852e-04,)] l_pix: 3.9042e-01 
+19-11-19 12:29:31.854 - INFO: [epoch:  0, iter: 228,600, lr:(1.850e-04,1.850e-04,)] l_pix: 7.6699e-01 
+19-11-19 12:30:48.112 - INFO: [epoch:  0, iter: 228,650, lr:(1.848e-04,1.848e-04,)] l_pix: 7.2228e-01 
+19-11-19 12:32:00.543 - INFO: [epoch:  0, iter: 228,700, lr:(1.846e-04,1.846e-04,)] l_pix: 4.4273e-01 
+19-11-19 12:33:31.011 - INFO: [epoch:  0, iter: 228,750, lr:(1.844e-04,1.844e-04,)] l_pix: 5.8700e-01 
+19-11-19 12:34:45.192 - INFO: [epoch:  0, iter: 228,800, lr:(1.842e-04,1.842e-04,)] l_pix: 4.6165e-01 
+19-11-19 12:36:14.394 - INFO: [epoch:  0, iter: 228,850, lr:(1.839e-04,1.839e-04,)] l_pix: 8.1816e-01 
+19-11-19 12:37:34.879 - INFO: [epoch:  0, iter: 228,900, lr:(1.837e-04,1.837e-04,)] l_pix: 3.2482e-01 
+19-11-19 12:38:55.795 - INFO: [epoch:  0, iter: 228,950, lr:(1.835e-04,1.835e-04,)] l_pix: 5.0607e-01 
+19-11-19 12:40:15.076 - INFO: [epoch:  0, iter: 229,000, lr:(1.833e-04,1.833e-04,)] l_pix: 6.2503e-01 
+19-11-19 12:41:38.884 - INFO: [epoch:  0, iter: 229,050, lr:(1.831e-04,1.831e-04,)] l_pix: 5.6408e-01 
+19-11-19 12:42:58.210 - INFO: [epoch:  0, iter: 229,100, lr:(1.829e-04,1.829e-04,)] l_pix: 3.5861e-01 
+19-11-19 12:44:11.183 - INFO: [epoch:  0, iter: 229,150, lr:(1.827e-04,1.827e-04,)] l_pix: 6.8224e-01 
+19-11-19 12:45:40.369 - INFO: [epoch:  0, iter: 229,200, lr:(1.825e-04,1.825e-04,)] l_pix: 3.9091e-01 
+19-11-19 12:47:06.050 - INFO: [epoch:  0, iter: 229,250, lr:(1.823e-04,1.823e-04,)] l_pix: 2.2567e-01 
+19-11-19 12:48:20.432 - INFO: [epoch:  0, iter: 229,300, lr:(1.821e-04,1.821e-04,)] l_pix: 3.6008e-01 
+19-11-19 12:49:42.936 - INFO: [epoch:  0, iter: 229,350, lr:(1.819e-04,1.819e-04,)] l_pix: 5.8515e-01 
+19-11-19 12:51:08.667 - INFO: [epoch:  0, iter: 229,400, lr:(1.817e-04,1.817e-04,)] l_pix: 6.0606e-01 
+19-11-19 12:52:29.325 - INFO: [epoch:  0, iter: 229,450, lr:(1.814e-04,1.814e-04,)] l_pix: 4.2649e-01 
+19-11-19 12:53:58.945 - INFO: [epoch:  0, iter: 229,500, lr:(1.812e-04,1.812e-04,)] l_pix: 4.0821e-01 
+19-11-19 12:55:21.770 - INFO: [epoch:  0, iter: 229,550, lr:(1.810e-04,1.810e-04,)] l_pix: 7.9222e-01 
+19-11-19 12:56:32.833 - INFO: [epoch:  0, iter: 229,600, lr:(1.808e-04,1.808e-04,)] l_pix: 8.5182e-01 
+19-11-19 12:57:52.821 - INFO: [epoch:  0, iter: 229,650, lr:(1.806e-04,1.806e-04,)] l_pix: 5.0986e-01 
+19-11-19 12:59:12.238 - INFO: [epoch:  0, iter: 229,700, lr:(1.804e-04,1.804e-04,)] l_pix: 7.2452e-01 
+19-11-19 13:00:39.198 - INFO: [epoch:  0, iter: 229,750, lr:(1.802e-04,1.802e-04,)] l_pix: 5.6173e-01 
+19-11-19 13:02:04.874 - INFO: [epoch:  0, iter: 229,800, lr:(1.800e-04,1.800e-04,)] l_pix: 6.5817e-01 
+19-11-19 13:03:27.129 - INFO: [epoch:  0, iter: 229,850, lr:(1.798e-04,1.798e-04,)] l_pix: 9.1760e-01 
+19-11-19 13:04:47.348 - INFO: [epoch:  0, iter: 229,900, lr:(1.796e-04,1.796e-04,)] l_pix: 5.1855e-01 
+19-11-19 13:06:08.079 - INFO: [epoch:  0, iter: 229,950, lr:(1.794e-04,1.794e-04,)] l_pix: 4.4150e-01 
+19-11-19 13:07:25.229 - INFO: [epoch:  0, iter: 230,000, lr:(1.792e-04,1.792e-04,)] l_pix: 2.8576e-01 
+19-11-19 14:57:21.890 - INFO: # Validation # PSNR: 3.6053e+01: 10091373: 3.8247e+01 10099858: 4.0125e+01 10126908: 3.8666e+01 10272022: 3.1589e+01 10306321: 3.1636e+01
+19-11-19 14:57:21.890 - INFO: Saving models and training states.
+19-11-19 14:58:44.047 - INFO: [epoch:  0, iter: 230,050, lr:(1.789e-04,1.789e-04,)] l_pix: 4.9813e-01 
+19-11-19 14:59:59.596 - INFO: [epoch:  0, iter: 230,100, lr:(1.787e-04,1.787e-04,)] l_pix: 4.4490e-01 
+19-11-19 15:01:15.762 - INFO: [epoch:  0, iter: 230,150, lr:(1.785e-04,1.785e-04,)] l_pix: 6.0444e-01 
+19-11-19 15:02:29.453 - INFO: [epoch:  0, iter: 230,200, lr:(1.783e-04,1.783e-04,)] l_pix: 6.3448e-01 
+19-11-19 15:03:46.630 - INFO: [epoch:  0, iter: 230,250, lr:(1.781e-04,1.781e-04,)] l_pix: 3.4711e-01 
+19-11-19 15:05:01.563 - INFO: [epoch:  0, iter: 230,300, lr:(1.779e-04,1.779e-04,)] l_pix: 4.2160e-01 
+19-11-19 15:06:16.125 - INFO: [epoch:  0, iter: 230,350, lr:(1.777e-04,1.777e-04,)] l_pix: 3.4205e-01 
+19-11-19 15:07:36.209 - INFO: [epoch:  0, iter: 230,400, lr:(1.775e-04,1.775e-04,)] l_pix: 7.4719e-01 
+19-11-19 15:08:49.544 - INFO: [epoch:  0, iter: 230,450, lr:(1.773e-04,1.773e-04,)] l_pix: 5.6122e-01 
+19-11-19 15:10:04.243 - INFO: [epoch:  0, iter: 230,500, lr:(1.771e-04,1.771e-04,)] l_pix: 6.6883e-01 
+19-11-19 15:11:20.468 - INFO: [epoch:  0, iter: 230,550, lr:(1.769e-04,1.769e-04,)] l_pix: 6.1701e-01 
+19-11-19 15:12:46.551 - INFO: [epoch:  0, iter: 230,600, lr:(1.767e-04,1.767e-04,)] l_pix: 6.6184e-01 
+19-11-19 15:14:00.093 - INFO: [epoch:  0, iter: 230,650, lr:(1.764e-04,1.764e-04,)] l_pix: 3.5064e-01 
+19-11-19 15:15:17.208 - INFO: [epoch:  0, iter: 230,700, lr:(1.762e-04,1.762e-04,)] l_pix: 4.6969e-01 
+19-11-19 15:16:44.641 - INFO: [epoch:  0, iter: 230,750, lr:(1.760e-04,1.760e-04,)] l_pix: 4.7650e-01 
+19-11-19 15:17:58.045 - INFO: [epoch:  0, iter: 230,800, lr:(1.758e-04,1.758e-04,)] l_pix: 6.7677e-01 
+19-11-19 15:19:11.921 - INFO: [epoch:  0, iter: 230,850, lr:(1.756e-04,1.756e-04,)] l_pix: 4.9189e-01 
+19-11-19 15:20:32.799 - INFO: [epoch:  0, iter: 230,900, lr:(1.754e-04,1.754e-04,)] l_pix: 3.9424e-01 
+19-11-19 15:21:52.088 - INFO: [epoch:  0, iter: 230,950, lr:(1.752e-04,1.752e-04,)] l_pix: 4.4336e-01 
+19-11-19 15:23:09.066 - INFO: [epoch:  0, iter: 231,000, lr:(1.750e-04,1.750e-04,)] l_pix: 4.9253e-01 
+19-11-19 15:24:33.036 - INFO: [epoch:  0, iter: 231,050, lr:(1.748e-04,1.748e-04,)] l_pix: 6.1630e-01 
+19-11-19 15:25:53.496 - INFO: [epoch:  0, iter: 231,100, lr:(1.746e-04,1.746e-04,)] l_pix: 3.9110e-01 
+19-11-19 15:27:13.077 - INFO: [epoch:  0, iter: 231,150, lr:(1.744e-04,1.744e-04,)] l_pix: 3.8168e-01 
+19-11-19 15:28:31.344 - INFO: [epoch:  0, iter: 231,200, lr:(1.742e-04,1.742e-04,)] l_pix: 6.2006e-01 
+19-11-19 15:29:53.289 - INFO: [epoch:  0, iter: 231,250, lr:(1.740e-04,1.740e-04,)] l_pix: 5.0310e-01 
+19-11-19 15:31:09.356 - INFO: [epoch:  0, iter: 231,300, lr:(1.737e-04,1.737e-04,)] l_pix: 2.9147e-01 
+19-11-19 15:32:25.960 - INFO: [epoch:  0, iter: 231,350, lr:(1.735e-04,1.735e-04,)] l_pix: 3.8474e-01 
+19-11-19 15:33:40.453 - INFO: [epoch:  0, iter: 231,400, lr:(1.733e-04,1.733e-04,)] l_pix: 4.6496e-01 
+19-11-19 15:34:58.446 - INFO: [epoch:  0, iter: 231,450, lr:(1.731e-04,1.731e-04,)] l_pix: 3.0762e-01 
+19-11-19 15:36:21.236 - INFO: [epoch:  0, iter: 231,500, lr:(1.729e-04,1.729e-04,)] l_pix: 3.2367e-01 
+19-11-19 15:37:46.885 - INFO: [epoch:  0, iter: 231,550, lr:(1.727e-04,1.727e-04,)] l_pix: 4.3813e-01 
+19-11-19 15:39:04.756 - INFO: [epoch:  0, iter: 231,600, lr:(1.725e-04,1.725e-04,)] l_pix: 4.7748e-01 
+19-11-19 15:40:23.476 - INFO: [epoch:  0, iter: 231,650, lr:(1.723e-04,1.723e-04,)] l_pix: 3.5430e-01 
+19-11-19 15:41:37.759 - INFO: [epoch:  0, iter: 231,700, lr:(1.721e-04,1.721e-04,)] l_pix: 1.5583e-01 
+19-11-19 15:42:57.062 - INFO: [epoch:  0, iter: 231,750, lr:(1.719e-04,1.719e-04,)] l_pix: 2.8249e-01 
+19-11-19 15:44:19.733 - INFO: [epoch:  0, iter: 231,800, lr:(1.717e-04,1.717e-04,)] l_pix: 2.7604e-01 
+19-11-19 15:45:39.925 - INFO: [epoch:  0, iter: 231,850, lr:(1.715e-04,1.715e-04,)] l_pix: 4.1909e-01 
+19-11-19 15:46:54.450 - INFO: [epoch:  0, iter: 231,900, lr:(1.713e-04,1.713e-04,)] l_pix: 4.1693e-01 
+19-11-19 15:48:09.008 - INFO: [epoch:  0, iter: 231,950, lr:(1.711e-04,1.711e-04,)] l_pix: 4.5463e-01 
+19-11-19 15:49:25.946 - INFO: [epoch:  0, iter: 232,000, lr:(1.708e-04,1.708e-04,)] l_pix: 4.6141e-01 
+19-11-19 15:50:41.498 - INFO: [epoch:  0, iter: 232,050, lr:(1.706e-04,1.706e-04,)] l_pix: 4.2430e-01 
+19-11-19 15:52:00.996 - INFO: [epoch:  0, iter: 232,100, lr:(1.704e-04,1.704e-04,)] l_pix: 2.3269e-01 
+19-11-19 15:53:19.279 - INFO: [epoch:  0, iter: 232,150, lr:(1.702e-04,1.702e-04,)] l_pix: 6.6755e-01 
+19-11-19 15:54:35.318 - INFO: [epoch:  0, iter: 232,200, lr:(1.700e-04,1.700e-04,)] l_pix: 4.2183e-01 
+19-11-19 15:55:48.106 - INFO: [epoch:  0, iter: 232,250, lr:(1.698e-04,1.698e-04,)] l_pix: 6.0242e-01 
+19-11-19 15:57:07.920 - INFO: [epoch:  0, iter: 232,300, lr:(1.696e-04,1.696e-04,)] l_pix: 4.0700e-01 
+19-11-19 15:58:22.452 - INFO: [epoch:  0, iter: 232,350, lr:(1.694e-04,1.694e-04,)] l_pix: 3.0835e-01 
+19-11-19 15:59:37.686 - INFO: [epoch:  0, iter: 232,400, lr:(1.692e-04,1.692e-04,)] l_pix: 3.3035e-01 
+19-11-19 16:00:59.971 - INFO: [epoch:  0, iter: 232,450, lr:(1.690e-04,1.690e-04,)] l_pix: 4.3437e-01 
+19-11-19 16:02:20.218 - INFO: [epoch:  0, iter: 232,500, lr:(1.688e-04,1.688e-04,)] l_pix: 4.9884e-01 
+19-11-19 16:03:35.995 - INFO: [epoch:  0, iter: 232,550, lr:(1.686e-04,1.686e-04,)] l_pix: 3.9718e-01 
+19-11-19 16:04:57.544 - INFO: [epoch:  0, iter: 232,600, lr:(1.684e-04,1.684e-04,)] l_pix: 4.7732e-01 
+19-11-19 16:06:10.163 - INFO: [epoch:  0, iter: 232,650, lr:(1.682e-04,1.682e-04,)] l_pix: 1.9129e-01 
+19-11-19 16:07:24.410 - INFO: [epoch:  0, iter: 232,700, lr:(1.679e-04,1.679e-04,)] l_pix: 4.6219e-01 
+19-11-19 16:08:43.011 - INFO: [epoch:  0, iter: 232,750, lr:(1.677e-04,1.677e-04,)] l_pix: 5.7674e-01 
+19-11-19 16:10:03.726 - INFO: [epoch:  0, iter: 232,800, lr:(1.675e-04,1.675e-04,)] l_pix: 5.2068e-01 
+19-11-19 16:11:23.875 - INFO: [epoch:  0, iter: 232,850, lr:(1.673e-04,1.673e-04,)] l_pix: 3.0914e-01 
+19-11-19 16:12:46.622 - INFO: [epoch:  0, iter: 232,900, lr:(1.671e-04,1.671e-04,)] l_pix: 1.1227e-01 
+19-11-19 16:14:07.136 - INFO: [epoch:  0, iter: 232,950, lr:(1.669e-04,1.669e-04,)] l_pix: 6.3608e-01 
+19-11-19 16:15:26.207 - INFO: [epoch:  0, iter: 233,000, lr:(1.667e-04,1.667e-04,)] l_pix: 4.6300e-01 
+19-11-19 16:16:55.448 - INFO: [epoch:  0, iter: 233,050, lr:(1.665e-04,1.665e-04,)] l_pix: 2.8719e-01 
+19-11-19 16:18:19.915 - INFO: [epoch:  0, iter: 233,100, lr:(1.663e-04,1.663e-04,)] l_pix: 5.7931e-01 
+19-11-19 16:19:34.948 - INFO: [epoch:  0, iter: 233,150, lr:(1.661e-04,1.661e-04,)] l_pix: 2.7110e-01 
+19-11-19 16:20:53.759 - INFO: [epoch:  0, iter: 233,200, lr:(1.659e-04,1.659e-04,)] l_pix: 3.4925e-01 
+19-11-19 16:22:30.246 - INFO: [epoch:  0, iter: 233,250, lr:(1.657e-04,1.657e-04,)] l_pix: 4.2429e-01 
+19-11-19 16:23:55.022 - INFO: [epoch:  0, iter: 233,300, lr:(1.655e-04,1.655e-04,)] l_pix: 5.2966e-01 
+19-11-19 16:25:23.474 - INFO: [epoch:  0, iter: 233,350, lr:(1.653e-04,1.653e-04,)] l_pix: 5.2793e-01 
+19-11-19 16:26:43.412 - INFO: [epoch:  0, iter: 233,400, lr:(1.651e-04,1.651e-04,)] l_pix: 3.1068e-01 
+19-11-19 16:28:04.787 - INFO: [epoch:  0, iter: 233,450, lr:(1.649e-04,1.649e-04,)] l_pix: 4.2569e-01 
+19-11-19 16:29:34.994 - INFO: [epoch:  0, iter: 233,500, lr:(1.646e-04,1.646e-04,)] l_pix: 4.0164e-01 
+19-11-19 16:31:01.167 - INFO: [epoch:  0, iter: 233,550, lr:(1.644e-04,1.644e-04,)] l_pix: 6.1533e-01 
+19-11-19 16:32:26.465 - INFO: [epoch:  0, iter: 233,600, lr:(1.642e-04,1.642e-04,)] l_pix: 6.2086e-01 
+19-11-19 16:33:57.269 - INFO: [epoch:  0, iter: 233,650, lr:(1.640e-04,1.640e-04,)] l_pix: 2.8765e-01 
+19-11-19 16:35:20.856 - INFO: [epoch:  0, iter: 233,700, lr:(1.638e-04,1.638e-04,)] l_pix: 3.8893e-01 
+19-11-19 16:36:46.221 - INFO: [epoch:  0, iter: 233,750, lr:(1.636e-04,1.636e-04,)] l_pix: 2.3332e-01 
+19-11-19 16:38:09.278 - INFO: [epoch:  0, iter: 233,800, lr:(1.634e-04,1.634e-04,)] l_pix: 4.2045e-01 
+19-11-19 16:39:43.265 - INFO: [epoch:  0, iter: 233,850, lr:(1.632e-04,1.632e-04,)] l_pix: 5.5946e-01 
+19-11-19 16:41:05.028 - INFO: [epoch:  0, iter: 233,900, lr:(1.630e-04,1.630e-04,)] l_pix: 4.5191e-01 
+19-11-19 16:42:21.983 - INFO: [epoch:  0, iter: 233,950, lr:(1.628e-04,1.628e-04,)] l_pix: 2.5708e-01 
+19-11-19 16:43:39.944 - INFO: [epoch:  0, iter: 234,000, lr:(1.626e-04,1.626e-04,)] l_pix: 4.2813e-01 
+19-11-19 16:45:05.281 - INFO: [epoch:  0, iter: 234,050, lr:(1.624e-04,1.624e-04,)] l_pix: 6.2824e-01 
+19-11-19 16:46:18.098 - INFO: [epoch:  0, iter: 234,100, lr:(1.622e-04,1.622e-04,)] l_pix: 5.2333e-01 
+19-11-19 16:47:30.458 - INFO: [epoch:  0, iter: 234,150, lr:(1.620e-04,1.620e-04,)] l_pix: 4.6846e-01 
+19-11-19 16:48:46.067 - INFO: [epoch:  0, iter: 234,200, lr:(1.618e-04,1.618e-04,)] l_pix: 4.2152e-01 
+19-11-19 16:50:04.689 - INFO: [epoch:  0, iter: 234,250, lr:(1.616e-04,1.616e-04,)] l_pix: 3.5754e-01 
+19-11-19 16:51:31.007 - INFO: [epoch:  0, iter: 234,300, lr:(1.614e-04,1.614e-04,)] l_pix: 4.7207e-01 
+19-11-19 16:52:54.008 - INFO: [epoch:  0, iter: 234,350, lr:(1.611e-04,1.611e-04,)] l_pix: 5.6192e-01 
+19-11-19 16:54:17.483 - INFO: [epoch:  0, iter: 234,400, lr:(1.609e-04,1.609e-04,)] l_pix: 4.2971e-01 
+19-11-19 16:55:40.256 - INFO: [epoch:  0, iter: 234,450, lr:(1.607e-04,1.607e-04,)] l_pix: 2.7905e-01 
+19-11-19 16:57:03.230 - INFO: [epoch:  0, iter: 234,500, lr:(1.605e-04,1.605e-04,)] l_pix: 5.9575e-01 
+19-11-19 16:58:25.017 - INFO: [epoch:  0, iter: 234,550, lr:(1.603e-04,1.603e-04,)] l_pix: 2.9164e-01 
+19-11-19 16:59:43.270 - INFO: [epoch:  0, iter: 234,600, lr:(1.601e-04,1.601e-04,)] l_pix: 3.4497e-01 
+19-11-19 17:01:07.764 - INFO: [epoch:  0, iter: 234,650, lr:(1.599e-04,1.599e-04,)] l_pix: 5.0108e-01 
+19-11-19 17:02:31.780 - INFO: [epoch:  0, iter: 234,700, lr:(1.597e-04,1.597e-04,)] l_pix: 3.1406e-01 
+19-11-19 17:03:55.779 - INFO: [epoch:  0, iter: 234,750, lr:(1.595e-04,1.595e-04,)] l_pix: 8.1331e-01 
+19-11-19 17:05:21.310 - INFO: [epoch:  0, iter: 234,800, lr:(1.593e-04,1.593e-04,)] l_pix: 5.1653e-01 
+19-11-19 17:06:40.515 - INFO: [epoch:  0, iter: 234,850, lr:(1.591e-04,1.591e-04,)] l_pix: 5.3683e-01 
+19-11-19 17:08:09.599 - INFO: [epoch:  0, iter: 234,900, lr:(1.589e-04,1.589e-04,)] l_pix: 3.1978e-01 
+19-11-19 17:09:33.308 - INFO: [epoch:  0, iter: 234,950, lr:(1.587e-04,1.587e-04,)] l_pix: 4.5684e-01 
+19-11-19 17:11:04.829 - INFO: [epoch:  0, iter: 235,000, lr:(1.585e-04,1.585e-04,)] l_pix: 2.3322e-01 
+19-11-19 20:29:12.563 - INFO: # Validation # PSNR: 3.6025e+01: 10091373: 3.8221e+01 10099858: 4.0146e+01 10126908: 3.8631e+01 10272022: 3.1498e+01 10306321: 3.1629e+01
+19-11-19 20:29:12.564 - INFO: Saving models and training states.
+19-11-19 20:30:47.101 - INFO: [epoch:  0, iter: 235,050, lr:(1.583e-04,1.583e-04,)] l_pix: 3.3032e-01 
+19-11-19 20:32:23.657 - INFO: [epoch:  0, iter: 235,100, lr:(1.581e-04,1.581e-04,)] l_pix: 3.2695e-01 
+19-11-19 20:33:52.666 - INFO: [epoch:  0, iter: 235,150, lr:(1.579e-04,1.579e-04,)] l_pix: 3.0026e-01 
+19-11-19 20:35:15.128 - INFO: [epoch:  0, iter: 235,200, lr:(1.577e-04,1.577e-04,)] l_pix: 5.5734e-01 
+19-11-19 20:36:49.286 - INFO: [epoch:  0, iter: 235,250, lr:(1.575e-04,1.575e-04,)] l_pix: 8.3158e-01 
+19-11-19 20:38:09.162 - INFO: [epoch:  0, iter: 235,300, lr:(1.573e-04,1.573e-04,)] l_pix: 5.2375e-01 
+19-11-19 20:39:39.590 - INFO: [epoch:  0, iter: 235,350, lr:(1.570e-04,1.570e-04,)] l_pix: 3.5511e-01 
+19-11-19 20:41:17.955 - INFO: [epoch:  0, iter: 235,400, lr:(1.568e-04,1.568e-04,)] l_pix: 1.8609e-01 
+19-11-19 20:42:55.833 - INFO: [epoch:  0, iter: 235,450, lr:(1.566e-04,1.566e-04,)] l_pix: 3.5450e-01 
+19-11-19 20:44:35.234 - INFO: [epoch:  0, iter: 235,500, lr:(1.564e-04,1.564e-04,)] l_pix: 3.8234e-01 
+19-11-19 20:46:03.852 - INFO: [epoch:  0, iter: 235,550, lr:(1.562e-04,1.562e-04,)] l_pix: 3.2921e-01 
+19-11-19 20:47:31.230 - INFO: [epoch:  0, iter: 235,600, lr:(1.560e-04,1.560e-04,)] l_pix: 3.1049e-01 
+19-11-19 20:48:58.885 - INFO: [epoch:  0, iter: 235,650, lr:(1.558e-04,1.558e-04,)] l_pix: 4.8379e-01 
+19-11-19 20:50:18.148 - INFO: [epoch:  0, iter: 235,700, lr:(1.556e-04,1.556e-04,)] l_pix: 3.9593e-01 
+19-11-19 20:51:33.057 - INFO: [epoch:  0, iter: 235,750, lr:(1.554e-04,1.554e-04,)] l_pix: 3.7189e-01 
+19-11-19 20:52:52.034 - INFO: [epoch:  0, iter: 235,800, lr:(1.552e-04,1.552e-04,)] l_pix: 3.3996e-01 
+19-11-19 20:54:18.279 - INFO: [epoch:  0, iter: 235,850, lr:(1.550e-04,1.550e-04,)] l_pix: 3.3527e-01 
+19-11-19 20:55:47.561 - INFO: [epoch:  0, iter: 235,900, lr:(1.548e-04,1.548e-04,)] l_pix: 3.6094e-01 
+19-11-19 20:57:02.926 - INFO: [epoch:  0, iter: 235,950, lr:(1.546e-04,1.546e-04,)] l_pix: 2.7621e-01 
+19-11-19 20:58:25.369 - INFO: [epoch:  0, iter: 236,000, lr:(1.544e-04,1.544e-04,)] l_pix: 5.6552e-01 
+19-11-19 20:59:44.286 - INFO: [epoch:  0, iter: 236,050, lr:(1.542e-04,1.542e-04,)] l_pix: 7.5269e-01 
+19-11-19 21:01:05.201 - INFO: [epoch:  0, iter: 236,100, lr:(1.540e-04,1.540e-04,)] l_pix: 3.9633e-01 
+19-11-19 21:02:25.477 - INFO: [epoch:  0, iter: 236,150, lr:(1.538e-04,1.538e-04,)] l_pix: 4.0011e-01 
+19-11-19 21:04:01.673 - INFO: [epoch:  0, iter: 236,200, lr:(1.536e-04,1.536e-04,)] l_pix: 7.5680e-01 
+19-11-19 21:05:23.021 - INFO: [epoch:  0, iter: 236,250, lr:(1.534e-04,1.534e-04,)] l_pix: 4.5677e-01 
+19-11-19 21:06:39.547 - INFO: [epoch:  0, iter: 236,300, lr:(1.532e-04,1.532e-04,)] l_pix: 3.9352e-01 
+19-11-19 21:07:58.700 - INFO: [epoch:  0, iter: 236,350, lr:(1.530e-04,1.530e-04,)] l_pix: 4.3084e-01 
+19-11-19 21:09:24.337 - INFO: [epoch:  0, iter: 236,400, lr:(1.528e-04,1.528e-04,)] l_pix: 5.0430e-01 
+19-11-19 21:10:48.767 - INFO: [epoch:  0, iter: 236,450, lr:(1.526e-04,1.526e-04,)] l_pix: 5.5783e-01 
+19-11-19 21:12:01.104 - INFO: [epoch:  0, iter: 236,500, lr:(1.524e-04,1.524e-04,)] l_pix: 5.2668e-01 
+19-11-19 21:13:19.044 - INFO: [epoch:  0, iter: 236,550, lr:(1.522e-04,1.522e-04,)] l_pix: 6.5264e-01 
+19-11-19 21:14:35.368 - INFO: [epoch:  0, iter: 236,600, lr:(1.520e-04,1.520e-04,)] l_pix: 3.9357e-01 
+19-11-19 21:16:02.514 - INFO: [epoch:  0, iter: 236,650, lr:(1.517e-04,1.517e-04,)] l_pix: 5.5408e-01 
+19-11-19 21:17:17.808 - INFO: [epoch:  0, iter: 236,700, lr:(1.515e-04,1.515e-04,)] l_pix: 4.3175e-01 
+19-11-19 21:18:28.226 - INFO: [epoch:  0, iter: 236,750, lr:(1.513e-04,1.513e-04,)] l_pix: 5.4063e-01 
+19-11-19 21:19:43.947 - INFO: [epoch:  0, iter: 236,800, lr:(1.511e-04,1.511e-04,)] l_pix: 5.0203e-01 
+19-11-19 21:21:08.729 - INFO: [epoch:  0, iter: 236,850, lr:(1.509e-04,1.509e-04,)] l_pix: 5.8652e-01 
+19-11-19 21:22:40.408 - INFO: [epoch:  0, iter: 236,900, lr:(1.507e-04,1.507e-04,)] l_pix: 5.2737e-01 
+19-11-19 21:24:07.668 - INFO: [epoch:  0, iter: 236,950, lr:(1.505e-04,1.505e-04,)] l_pix: 3.3812e-01 
+19-11-19 21:25:39.036 - INFO: [epoch:  0, iter: 237,000, lr:(1.503e-04,1.503e-04,)] l_pix: 4.7662e-01 
+19-11-19 21:27:05.816 - INFO: [epoch:  0, iter: 237,050, lr:(1.501e-04,1.501e-04,)] l_pix: 3.5534e-01 
+19-11-19 21:28:28.338 - INFO: [epoch:  0, iter: 237,100, lr:(1.499e-04,1.499e-04,)] l_pix: 3.4784e-01 
+19-11-19 21:29:54.527 - INFO: [epoch:  0, iter: 237,150, lr:(1.497e-04,1.497e-04,)] l_pix: 4.7985e-01 
+19-11-19 21:31:19.289 - INFO: [epoch:  0, iter: 237,200, lr:(1.495e-04,1.495e-04,)] l_pix: 4.0778e-01 
+19-11-19 21:32:49.943 - INFO: [epoch:  0, iter: 237,250, lr:(1.493e-04,1.493e-04,)] l_pix: 4.0066e-01 
+19-11-19 21:34:22.728 - INFO: [epoch:  0, iter: 237,300, lr:(1.491e-04,1.491e-04,)] l_pix: 4.5196e-01 
+19-11-19 21:35:45.359 - INFO: [epoch:  0, iter: 237,350, lr:(1.489e-04,1.489e-04,)] l_pix: 6.5466e-01 
+19-11-19 21:37:12.670 - INFO: [epoch:  0, iter: 237,400, lr:(1.487e-04,1.487e-04,)] l_pix: 6.9332e-01 
+19-11-19 21:38:40.568 - INFO: [epoch:  0, iter: 237,450, lr:(1.485e-04,1.485e-04,)] l_pix: 5.6279e-01 
+19-11-19 21:40:05.341 - INFO: [epoch:  0, iter: 237,500, lr:(1.483e-04,1.483e-04,)] l_pix: 4.4368e-01 
+19-11-19 21:41:35.869 - INFO: [epoch:  0, iter: 237,550, lr:(1.481e-04,1.481e-04,)] l_pix: 5.1657e-01 
+19-11-19 21:43:10.733 - INFO: [epoch:  0, iter: 237,600, lr:(1.479e-04,1.479e-04,)] l_pix: 6.9031e-01 
+19-11-19 21:44:33.897 - INFO: [epoch:  0, iter: 237,650, lr:(1.477e-04,1.477e-04,)] l_pix: 4.5780e-01 
+19-11-19 21:45:59.973 - INFO: [epoch:  0, iter: 237,700, lr:(1.475e-04,1.475e-04,)] l_pix: 4.4557e-01 
+19-11-19 21:47:25.306 - INFO: [epoch:  0, iter: 237,750, lr:(1.473e-04,1.473e-04,)] l_pix: 5.2933e-01 
+19-11-19 21:48:59.222 - INFO: [epoch:  0, iter: 237,800, lr:(1.471e-04,1.471e-04,)] l_pix: 6.3334e-01 
+19-11-19 21:50:29.660 - INFO: [epoch:  0, iter: 237,850, lr:(1.469e-04,1.469e-04,)] l_pix: 4.9340e-01 
+19-11-19 21:51:49.463 - INFO: [epoch:  0, iter: 237,900, lr:(1.467e-04,1.467e-04,)] l_pix: 9.3904e-01 
+19-11-19 21:53:08.373 - INFO: [epoch:  0, iter: 237,950, lr:(1.465e-04,1.465e-04,)] l_pix: 4.3816e-01 
+19-11-19 21:54:27.147 - INFO: [epoch:  0, iter: 238,000, lr:(1.463e-04,1.463e-04,)] l_pix: 5.4427e-01 
+19-11-19 21:55:42.975 - INFO: [epoch:  0, iter: 238,050, lr:(1.461e-04,1.461e-04,)] l_pix: 1.7280e-01 
+19-11-19 21:57:08.728 - INFO: [epoch:  0, iter: 238,100, lr:(1.459e-04,1.459e-04,)] l_pix: 3.4221e-01 
+19-11-19 21:58:32.323 - INFO: [epoch:  0, iter: 238,150, lr:(1.457e-04,1.457e-04,)] l_pix: 3.4393e-01 
+19-11-19 22:00:00.119 - INFO: [epoch:  0, iter: 238,200, lr:(1.455e-04,1.455e-04,)] l_pix: 5.6041e-01 
+19-11-19 22:01:30.420 - INFO: [epoch:  0, iter: 238,250, lr:(1.453e-04,1.453e-04,)] l_pix: 2.8452e-01 
+19-11-19 22:02:54.973 - INFO: [epoch:  0, iter: 238,300, lr:(1.451e-04,1.451e-04,)] l_pix: 5.1397e-01 
+19-11-19 22:04:18.228 - INFO: [epoch:  0, iter: 238,350, lr:(1.449e-04,1.449e-04,)] l_pix: 5.6690e-01 
+19-11-19 22:05:38.260 - INFO: [epoch:  0, iter: 238,400, lr:(1.447e-04,1.447e-04,)] l_pix: 3.9811e-01 
+19-11-19 22:07:01.389 - INFO: [epoch:  0, iter: 238,450, lr:(1.445e-04,1.445e-04,)] l_pix: 5.3224e-01 
+19-11-19 22:08:36.800 - INFO: [epoch:  0, iter: 238,500, lr:(1.443e-04,1.443e-04,)] l_pix: 3.3261e-01 
+19-11-19 22:10:08.439 - INFO: [epoch:  0, iter: 238,550, lr:(1.441e-04,1.441e-04,)] l_pix: 5.1632e-01 
+19-11-19 22:11:26.172 - INFO: [epoch:  0, iter: 238,600, lr:(1.439e-04,1.439e-04,)] l_pix: 6.1706e-01 
+19-11-19 22:12:53.926 - INFO: [epoch:  0, iter: 238,650, lr:(1.437e-04,1.437e-04,)] l_pix: 2.5788e-01 
+19-11-19 22:14:04.789 - INFO: [epoch:  0, iter: 238,700, lr:(1.435e-04,1.435e-04,)] l_pix: 6.1748e-01 
+19-11-19 22:15:27.508 - INFO: [epoch:  0, iter: 238,750, lr:(1.433e-04,1.433e-04,)] l_pix: 4.6893e-01 
+19-11-19 22:16:49.845 - INFO: [epoch:  0, iter: 238,800, lr:(1.431e-04,1.431e-04,)] l_pix: 3.2839e-01 
+19-11-19 22:18:13.389 - INFO: [epoch:  0, iter: 238,850, lr:(1.429e-04,1.429e-04,)] l_pix: 4.6128e-01 
+19-11-19 22:19:37.414 - INFO: [epoch:  0, iter: 238,900, lr:(1.427e-04,1.427e-04,)] l_pix: 3.2747e-01 
+19-11-19 22:21:01.694 - INFO: [epoch:  0, iter: 238,950, lr:(1.425e-04,1.425e-04,)] l_pix: 7.4683e-01 
+19-11-19 22:22:35.453 - INFO: [epoch:  0, iter: 239,000, lr:(1.423e-04,1.423e-04,)] l_pix: 6.4143e-01 
+19-11-19 22:23:59.158 - INFO: [epoch:  0, iter: 239,050, lr:(1.421e-04,1.421e-04,)] l_pix: 4.8720e-01 
+19-11-19 22:25:32.867 - INFO: [epoch:  0, iter: 239,100, lr:(1.419e-04,1.419e-04,)] l_pix: 7.3088e-01 
+19-11-19 22:27:00.985 - INFO: [epoch:  0, iter: 239,150, lr:(1.417e-04,1.417e-04,)] l_pix: 5.5874e-01 
+19-11-19 22:28:26.221 - INFO: [epoch:  0, iter: 239,200, lr:(1.415e-04,1.415e-04,)] l_pix: 3.7401e-01 
+19-11-19 22:29:55.830 - INFO: [epoch:  0, iter: 239,250, lr:(1.413e-04,1.413e-04,)] l_pix: 3.9854e-01 
+19-11-19 22:31:09.728 - INFO: [epoch:  0, iter: 239,300, lr:(1.411e-04,1.411e-04,)] l_pix: 4.5534e-01 
+19-11-19 22:32:40.264 - INFO: [epoch:  0, iter: 239,350, lr:(1.409e-04,1.409e-04,)] l_pix: 3.9118e-01 
+19-11-19 22:33:52.146 - INFO: [epoch:  0, iter: 239,400, lr:(1.407e-04,1.407e-04,)] l_pix: 2.8823e-01 
+19-11-19 22:35:01.623 - INFO: [epoch:  0, iter: 239,450, lr:(1.405e-04,1.405e-04,)] l_pix: 6.7416e-01 
+19-11-19 22:36:26.459 - INFO: [epoch:  0, iter: 239,500, lr:(1.403e-04,1.403e-04,)] l_pix: 4.5339e-01 
+19-11-19 22:37:56.287 - INFO: [epoch:  0, iter: 239,550, lr:(1.401e-04,1.401e-04,)] l_pix: 7.8607e-01 
+19-11-19 22:39:19.358 - INFO: [epoch:  0, iter: 239,600, lr:(1.399e-04,1.399e-04,)] l_pix: 4.0512e-01 
+19-11-19 22:40:46.374 - INFO: [epoch:  0, iter: 239,650, lr:(1.397e-04,1.397e-04,)] l_pix: 4.2749e-01 
+19-11-19 22:42:14.852 - INFO: [epoch:  0, iter: 239,700, lr:(1.395e-04,1.395e-04,)] l_pix: 6.9340e-01 
+19-11-19 22:43:27.902 - INFO: [epoch:  0, iter: 239,750, lr:(1.393e-04,1.393e-04,)] l_pix: 3.5571e-01 
+19-11-19 22:44:45.775 - INFO: [epoch:  0, iter: 239,800, lr:(1.391e-04,1.391e-04,)] l_pix: 4.3581e-01 
+19-11-19 22:46:15.539 - INFO: [epoch:  0, iter: 239,850, lr:(1.389e-04,1.389e-04,)] l_pix: 3.3629e-01 
+19-11-19 22:47:45.119 - INFO: [epoch:  0, iter: 239,900, lr:(1.387e-04,1.387e-04,)] l_pix: 4.2421e-01 
+19-11-19 22:49:26.405 - INFO: [epoch:  0, iter: 239,950, lr:(1.385e-04,1.385e-04,)] l_pix: 8.1460e-01 
+19-11-19 22:50:56.177 - INFO: [epoch:  0, iter: 240,000, lr:(1.383e-04,1.383e-04,)] l_pix: 4.8475e-01 
+19-11-20 02:08:27.922 - INFO: # Validation # PSNR: 3.6068e+01: 10091373: 3.8240e+01 10099858: 4.0116e+01 10126908: 3.8706e+01 10272022: 3.1583e+01 10306321: 3.1696e+01
+19-11-20 02:08:27.923 - INFO: Saving models and training states.
+19-11-20 02:09:57.714 - INFO: [epoch:  0, iter: 240,050, lr:(1.381e-04,1.381e-04,)] l_pix: 4.6847e-01 
+19-11-20 02:11:20.371 - INFO: [epoch:  0, iter: 240,100, lr:(1.379e-04,1.379e-04,)] l_pix: 6.1402e-01 
+19-11-20 02:12:42.939 - INFO: [epoch:  0, iter: 240,150, lr:(1.377e-04,1.377e-04,)] l_pix: 2.5899e-01 
+19-11-20 02:14:07.771 - INFO: [epoch:  0, iter: 240,200, lr:(1.375e-04,1.375e-04,)] l_pix: 2.1897e-01 
+19-11-20 02:15:35.348 - INFO: [epoch:  0, iter: 240,250, lr:(1.373e-04,1.373e-04,)] l_pix: 3.7291e-01 
+19-11-20 02:16:57.367 - INFO: [epoch:  0, iter: 240,300, lr:(1.371e-04,1.371e-04,)] l_pix: 3.8380e-01 
+19-11-20 02:18:29.061 - INFO: [epoch:  0, iter: 240,350, lr:(1.369e-04,1.369e-04,)] l_pix: 6.7547e-01 
+19-11-20 02:19:51.075 - INFO: [epoch:  0, iter: 240,400, lr:(1.367e-04,1.367e-04,)] l_pix: 3.5066e-01 
+19-11-20 02:21:20.328 - INFO: [epoch:  0, iter: 240,450, lr:(1.365e-04,1.365e-04,)] l_pix: 5.8775e-01 
+19-11-20 02:22:53.001 - INFO: [epoch:  0, iter: 240,500, lr:(1.363e-04,1.363e-04,)] l_pix: 4.4686e-01 
+19-11-20 02:24:16.193 - INFO: [epoch:  0, iter: 240,550, lr:(1.361e-04,1.361e-04,)] l_pix: 4.7913e-01 
+19-11-20 02:25:40.762 - INFO: [epoch:  0, iter: 240,600, lr:(1.359e-04,1.359e-04,)] l_pix: 4.7657e-01 
+19-11-20 02:27:02.189 - INFO: [epoch:  0, iter: 240,650, lr:(1.357e-04,1.357e-04,)] l_pix: 6.0625e-01 
+19-11-20 02:28:30.613 - INFO: [epoch:  0, iter: 240,700, lr:(1.355e-04,1.355e-04,)] l_pix: 5.6519e-01 
+19-11-20 02:29:50.491 - INFO: [epoch:  0, iter: 240,750, lr:(1.353e-04,1.353e-04,)] l_pix: 3.0155e-01 
+19-11-20 02:31:07.392 - INFO: [epoch:  0, iter: 240,800, lr:(1.351e-04,1.351e-04,)] l_pix: 2.8041e-01 
+19-11-20 02:32:29.412 - INFO: [epoch:  0, iter: 240,850, lr:(1.349e-04,1.349e-04,)] l_pix: 5.0057e-01 
+19-11-20 02:33:53.884 - INFO: [epoch:  0, iter: 240,900, lr:(1.347e-04,1.347e-04,)] l_pix: 4.1723e-01 
+19-11-20 02:35:24.293 - INFO: [epoch:  0, iter: 240,950, lr:(1.345e-04,1.345e-04,)] l_pix: 5.9385e-01 
+19-11-20 02:36:38.967 - INFO: [epoch:  0, iter: 241,000, lr:(1.343e-04,1.343e-04,)] l_pix: 3.8138e-01 
+19-11-20 02:38:06.238 - INFO: [epoch:  0, iter: 241,050, lr:(1.341e-04,1.341e-04,)] l_pix: 4.1374e-01 
+19-11-20 02:39:30.688 - INFO: [epoch:  0, iter: 241,100, lr:(1.339e-04,1.339e-04,)] l_pix: 3.9322e-01 
+19-11-20 02:40:51.149 - INFO: [epoch:  0, iter: 241,150, lr:(1.337e-04,1.337e-04,)] l_pix: 6.7427e-01 
+19-11-20 02:42:23.478 - INFO: [epoch:  0, iter: 241,200, lr:(1.335e-04,1.335e-04,)] l_pix: 3.8125e-01 
+19-11-20 02:43:46.465 - INFO: [epoch:  0, iter: 241,250, lr:(1.333e-04,1.333e-04,)] l_pix: 5.7598e-01 
+19-11-20 02:45:14.964 - INFO: [epoch:  0, iter: 241,300, lr:(1.331e-04,1.331e-04,)] l_pix: 3.8312e-01 
+19-11-20 02:46:36.721 - INFO: [epoch:  0, iter: 241,350, lr:(1.329e-04,1.329e-04,)] l_pix: 5.2104e-01 
+19-11-20 02:48:09.796 - INFO: [epoch:  0, iter: 241,400, lr:(1.327e-04,1.327e-04,)] l_pix: 6.2953e-01 
+19-11-20 02:49:29.700 - INFO: [epoch:  0, iter: 241,450, lr:(1.325e-04,1.325e-04,)] l_pix: 6.0148e-01 
+19-11-20 02:50:49.278 - INFO: [epoch:  0, iter: 241,500, lr:(1.323e-04,1.323e-04,)] l_pix: 3.4273e-01 
+19-11-20 02:52:10.882 - INFO: [epoch:  0, iter: 241,550, lr:(1.321e-04,1.321e-04,)] l_pix: 6.1323e-01 
+19-11-20 02:53:39.938 - INFO: [epoch:  0, iter: 241,600, lr:(1.319e-04,1.319e-04,)] l_pix: 3.7599e-01 
+19-11-20 02:55:01.266 - INFO: [epoch:  0, iter: 241,650, lr:(1.317e-04,1.317e-04,)] l_pix: 8.0258e-01 
+19-11-20 02:56:23.406 - INFO: [epoch:  0, iter: 241,700, lr:(1.315e-04,1.315e-04,)] l_pix: 5.2632e-01 
+19-11-20 02:57:42.404 - INFO: [epoch:  0, iter: 241,750, lr:(1.313e-04,1.313e-04,)] l_pix: 6.5574e-01 
+19-11-20 02:59:07.723 - INFO: [epoch:  0, iter: 241,800, lr:(1.311e-04,1.311e-04,)] l_pix: 5.2133e-01 
+19-11-20 03:00:38.025 - INFO: [epoch:  0, iter: 241,850, lr:(1.309e-04,1.309e-04,)] l_pix: 3.8951e-01 
+19-11-20 03:02:08.299 - INFO: [epoch:  0, iter: 241,900, lr:(1.307e-04,1.307e-04,)] l_pix: 3.4415e-01 
+19-11-20 03:03:29.757 - INFO: [epoch:  0, iter: 241,950, lr:(1.306e-04,1.306e-04,)] l_pix: 4.8630e-01 
+19-11-20 03:04:49.649 - INFO: [epoch:  0, iter: 242,000, lr:(1.304e-04,1.304e-04,)] l_pix: 5.0033e-01 
+19-11-20 03:06:17.928 - INFO: [epoch:  0, iter: 242,050, lr:(1.302e-04,1.302e-04,)] l_pix: 4.3554e-01 
+19-11-20 03:07:42.146 - INFO: [epoch:  0, iter: 242,100, lr:(1.300e-04,1.300e-04,)] l_pix: 3.5397e-01 
+19-11-20 03:09:02.464 - INFO: [epoch:  0, iter: 242,150, lr:(1.298e-04,1.298e-04,)] l_pix: 3.8159e-01 
+19-11-20 03:10:10.730 - INFO: [epoch:  0, iter: 242,200, lr:(1.296e-04,1.296e-04,)] l_pix: 5.6050e-01 
+19-11-20 03:11:35.598 - INFO: [epoch:  0, iter: 242,250, lr:(1.294e-04,1.294e-04,)] l_pix: 4.1977e-01 
+19-11-20 03:13:04.051 - INFO: [epoch:  0, iter: 242,300, lr:(1.292e-04,1.292e-04,)] l_pix: 6.2125e-01 
+19-11-20 03:14:30.417 - INFO: [epoch:  0, iter: 242,350, lr:(1.290e-04,1.290e-04,)] l_pix: 4.7356e-01 
+19-11-20 03:16:00.366 - INFO: [epoch:  0, iter: 242,400, lr:(1.288e-04,1.288e-04,)] l_pix: 3.6058e-01 
+19-11-20 03:17:26.513 - INFO: [epoch:  0, iter: 242,450, lr:(1.286e-04,1.286e-04,)] l_pix: 3.7358e-01 
+19-11-20 03:18:44.430 - INFO: [epoch:  0, iter: 242,500, lr:(1.284e-04,1.284e-04,)] l_pix: 8.5408e-01 
+19-11-20 03:20:06.355 - INFO: [epoch:  0, iter: 242,550, lr:(1.282e-04,1.282e-04,)] l_pix: 4.9130e-01 
+19-11-20 03:21:29.597 - INFO: [epoch:  0, iter: 242,600, lr:(1.280e-04,1.280e-04,)] l_pix: 3.9140e-01 
+19-11-20 03:22:48.246 - INFO: [epoch:  0, iter: 242,650, lr:(1.278e-04,1.278e-04,)] l_pix: 5.4417e-01 
+19-11-20 03:24:10.694 - INFO: [epoch:  0, iter: 242,700, lr:(1.276e-04,1.276e-04,)] l_pix: 4.4737e-01 
+19-11-20 03:25:28.595 - INFO: [epoch:  0, iter: 242,750, lr:(1.274e-04,1.274e-04,)] l_pix: 4.8629e-01 
+19-11-20 03:26:49.936 - INFO: [epoch:  0, iter: 242,800, lr:(1.272e-04,1.272e-04,)] l_pix: 6.1092e-01 
+19-11-20 03:28:05.248 - INFO: [epoch:  0, iter: 242,850, lr:(1.270e-04,1.270e-04,)] l_pix: 4.1743e-01 
+19-11-20 03:29:26.547 - INFO: [epoch:  0, iter: 242,900, lr:(1.268e-04,1.268e-04,)] l_pix: 4.3331e-01 
+19-11-20 03:30:49.525 - INFO: [epoch:  0, iter: 242,950, lr:(1.266e-04,1.266e-04,)] l_pix: 4.2138e-01 
+19-11-20 03:32:13.360 - INFO: [epoch:  0, iter: 243,000, lr:(1.264e-04,1.264e-04,)] l_pix: 2.3418e-01 
+19-11-20 03:33:44.934 - INFO: [epoch:  0, iter: 243,050, lr:(1.263e-04,1.263e-04,)] l_pix: 3.8965e-01 
+19-11-20 03:35:07.913 - INFO: [epoch:  0, iter: 243,100, lr:(1.261e-04,1.261e-04,)] l_pix: 4.8240e-01 
+19-11-20 03:36:35.234 - INFO: [epoch:  0, iter: 243,150, lr:(1.259e-04,1.259e-04,)] l_pix: 3.0869e-01 
+19-11-20 03:38:05.777 - INFO: [epoch:  0, iter: 243,200, lr:(1.257e-04,1.257e-04,)] l_pix: 4.4535e-01 
+19-11-20 03:39:26.986 - INFO: [epoch:  0, iter: 243,250, lr:(1.255e-04,1.255e-04,)] l_pix: 3.2659e-01 
+19-11-20 03:40:44.971 - INFO: [epoch:  0, iter: 243,300, lr:(1.253e-04,1.253e-04,)] l_pix: 7.1381e-01 
+19-11-20 03:42:04.946 - INFO: [epoch:  0, iter: 243,350, lr:(1.251e-04,1.251e-04,)] l_pix: 5.5059e-01 
+19-11-20 03:43:23.156 - INFO: [epoch:  0, iter: 243,400, lr:(1.249e-04,1.249e-04,)] l_pix: 3.5360e-01 
+19-11-20 03:44:48.325 - INFO: [epoch:  0, iter: 243,450, lr:(1.247e-04,1.247e-04,)] l_pix: 4.8495e-01 
+19-11-20 03:46:09.629 - INFO: [epoch:  0, iter: 243,500, lr:(1.245e-04,1.245e-04,)] l_pix: 3.8914e-01 
+19-11-20 03:47:32.188 - INFO: [epoch:  0, iter: 243,550, lr:(1.243e-04,1.243e-04,)] l_pix: 4.5844e-01 
+19-11-20 03:48:53.377 - INFO: [epoch:  0, iter: 243,600, lr:(1.241e-04,1.241e-04,)] l_pix: 3.1445e-01 
+19-11-20 03:50:13.319 - INFO: [epoch:  0, iter: 243,650, lr:(1.239e-04,1.239e-04,)] l_pix: 4.1268e-01 
+19-11-20 03:51:47.350 - INFO: [epoch:  0, iter: 243,700, lr:(1.237e-04,1.237e-04,)] l_pix: 3.9725e-01 
+19-11-20 03:53:05.258 - INFO: [epoch:  0, iter: 243,750, lr:(1.235e-04,1.235e-04,)] l_pix: 3.6015e-01 
+19-11-20 03:54:22.016 - INFO: [epoch:  0, iter: 243,800, lr:(1.233e-04,1.233e-04,)] l_pix: 4.2106e-01 
+19-11-20 03:55:34.433 - INFO: [epoch:  0, iter: 243,850, lr:(1.231e-04,1.231e-04,)] l_pix: 7.3883e-01 
+19-11-20 03:56:55.901 - INFO: [epoch:  0, iter: 243,900, lr:(1.230e-04,1.230e-04,)] l_pix: 3.8622e-01 
+19-11-20 03:58:18.338 - INFO: [epoch:  0, iter: 243,950, lr:(1.228e-04,1.228e-04,)] l_pix: 4.6202e-01 
+19-11-20 03:59:43.132 - INFO: [epoch:  0, iter: 244,000, lr:(1.226e-04,1.226e-04,)] l_pix: 6.0514e-01 
+19-11-20 04:01:07.878 - INFO: [epoch:  0, iter: 244,050, lr:(1.224e-04,1.224e-04,)] l_pix: 3.6652e-01 
+19-11-20 04:02:27.709 - INFO: [epoch:  0, iter: 244,100, lr:(1.222e-04,1.222e-04,)] l_pix: 6.3958e-01 
+19-11-20 04:03:49.016 - INFO: [epoch:  0, iter: 244,150, lr:(1.220e-04,1.220e-04,)] l_pix: 4.8613e-01 
+19-11-20 04:05:11.711 - INFO: [epoch:  0, iter: 244,200, lr:(1.218e-04,1.218e-04,)] l_pix: 6.1471e-01 
+19-11-20 04:06:31.361 - INFO: [epoch:  0, iter: 244,250, lr:(1.216e-04,1.216e-04,)] l_pix: 3.8024e-01 
+19-11-20 04:07:59.534 - INFO: [epoch:  0, iter: 244,300, lr:(1.214e-04,1.214e-04,)] l_pix: 5.6135e-01 
+19-11-20 04:09:19.309 - INFO: [epoch:  0, iter: 244,350, lr:(1.212e-04,1.212e-04,)] l_pix: 4.3519e-01 
+19-11-20 04:10:35.999 - INFO: [epoch:  0, iter: 244,400, lr:(1.210e-04,1.210e-04,)] l_pix: 7.9122e-01 
+19-11-20 04:11:46.612 - INFO: [epoch:  0, iter: 244,450, lr:(1.208e-04,1.208e-04,)] l_pix: 3.4922e-01 
+19-11-20 04:13:10.565 - INFO: [epoch:  0, iter: 244,500, lr:(1.206e-04,1.206e-04,)] l_pix: 4.3506e-01 
+19-11-20 04:14:29.283 - INFO: [epoch:  0, iter: 244,550, lr:(1.205e-04,1.205e-04,)] l_pix: 3.4808e-01 
+19-11-20 04:15:49.532 - INFO: [epoch:  0, iter: 244,600, lr:(1.203e-04,1.203e-04,)] l_pix: 4.7218e-01 
+19-11-20 04:17:16.644 - INFO: [epoch:  0, iter: 244,650, lr:(1.201e-04,1.201e-04,)] l_pix: 4.2104e-01 
+19-11-20 04:18:38.190 - INFO: [epoch:  0, iter: 244,700, lr:(1.199e-04,1.199e-04,)] l_pix: 5.0503e-01 
+19-11-20 04:20:05.681 - INFO: [epoch:  0, iter: 244,750, lr:(1.197e-04,1.197e-04,)] l_pix: 5.0830e-01 
+19-11-20 04:21:34.324 - INFO: [epoch:  0, iter: 244,800, lr:(1.195e-04,1.195e-04,)] l_pix: 3.7601e-01 
+19-11-20 04:23:01.303 - INFO: [epoch:  0, iter: 244,850, lr:(1.193e-04,1.193e-04,)] l_pix: 4.0106e-01 
+19-11-20 04:24:29.056 - INFO: [epoch:  0, iter: 244,900, lr:(1.191e-04,1.191e-04,)] l_pix: 7.4744e-01 
+19-11-20 04:25:48.947 - INFO: [epoch:  0, iter: 244,950, lr:(1.189e-04,1.189e-04,)] l_pix: 3.3451e-01 
+19-11-20 04:27:11.562 - INFO: [epoch:  0, iter: 245,000, lr:(1.187e-04,1.187e-04,)] l_pix: 5.7684e-01 
+19-11-20 07:47:13.147 - INFO: # Validation # PSNR: 3.6089e+01: 10091373: 3.8268e+01 10099858: 4.0168e+01 10126908: 3.8681e+01 10272022: 3.1633e+01 10306321: 3.1698e+01
+19-11-20 07:47:13.148 - INFO: Saving models and training states.
+19-11-20 07:48:33.172 - INFO: [epoch:  0, iter: 245,050, lr:(1.185e-04,1.185e-04,)] l_pix: 4.8929e-01 
+19-11-20 07:49:53.655 - INFO: [epoch:  0, iter: 245,100, lr:(1.183e-04,1.183e-04,)] l_pix: 2.4716e-01 
+19-11-20 07:51:19.174 - INFO: [epoch:  0, iter: 245,150, lr:(1.182e-04,1.182e-04,)] l_pix: 3.8393e-01 
+19-11-20 07:52:39.994 - INFO: [epoch:  0, iter: 245,200, lr:(1.180e-04,1.180e-04,)] l_pix: 6.1879e-01 
+19-11-20 07:53:59.271 - INFO: [epoch:  0, iter: 245,250, lr:(1.178e-04,1.178e-04,)] l_pix: 6.8995e-01 
+19-11-20 07:55:19.734 - INFO: [epoch:  0, iter: 245,300, lr:(1.176e-04,1.176e-04,)] l_pix: 6.4269e-01 
+19-11-20 07:56:36.818 - INFO: [epoch:  0, iter: 245,350, lr:(1.174e-04,1.174e-04,)] l_pix: 3.8420e-01 
+19-11-20 07:58:22.717 - INFO: [epoch:  0, iter: 245,400, lr:(1.172e-04,1.172e-04,)] l_pix: 5.2964e-01 
+19-11-20 07:59:49.437 - INFO: [epoch:  0, iter: 245,450, lr:(1.170e-04,1.170e-04,)] l_pix: 6.7203e-01 
+19-11-20 08:01:18.687 - INFO: [epoch:  0, iter: 245,500, lr:(1.168e-04,1.168e-04,)] l_pix: 2.9853e-01 
+19-11-20 08:02:38.428 - INFO: [epoch:  0, iter: 245,550, lr:(1.166e-04,1.166e-04,)] l_pix: 2.6905e-01 
+19-11-20 08:03:54.624 - INFO: [epoch:  0, iter: 245,600, lr:(1.164e-04,1.164e-04,)] l_pix: 3.9876e-01 
+19-11-20 08:05:22.688 - INFO: [epoch:  0, iter: 245,650, lr:(1.162e-04,1.162e-04,)] l_pix: 1.8481e-01 
+19-11-20 08:06:46.864 - INFO: [epoch:  0, iter: 245,700, lr:(1.161e-04,1.161e-04,)] l_pix: 5.7535e-01 
+19-11-20 08:08:10.892 - INFO: [epoch:  0, iter: 245,750, lr:(1.159e-04,1.159e-04,)] l_pix: 3.1501e-01 
+19-11-20 08:09:39.835 - INFO: [epoch:  0, iter: 245,800, lr:(1.157e-04,1.157e-04,)] l_pix: 2.3062e-01 
+19-11-20 08:11:06.815 - INFO: [epoch:  0, iter: 245,850, lr:(1.155e-04,1.155e-04,)] l_pix: 4.9660e-01 
+19-11-20 08:12:33.311 - INFO: [epoch:  0, iter: 245,900, lr:(1.153e-04,1.153e-04,)] l_pix: 3.1139e-01 
+19-11-20 08:13:59.368 - INFO: [epoch:  0, iter: 245,950, lr:(1.151e-04,1.151e-04,)] l_pix: 1.5046e-01 
+19-11-20 08:15:18.777 - INFO: [epoch:  0, iter: 246,000, lr:(1.149e-04,1.149e-04,)] l_pix: 4.3478e-01 
+19-11-20 08:16:49.849 - INFO: [epoch:  0, iter: 246,050, lr:(1.147e-04,1.147e-04,)] l_pix: 6.4026e-01 
+19-11-20 08:18:07.525 - INFO: [epoch:  0, iter: 246,100, lr:(1.145e-04,1.145e-04,)] l_pix: 8.1615e-01 
+19-11-20 08:19:31.867 - INFO: [epoch:  0, iter: 246,150, lr:(1.144e-04,1.144e-04,)] l_pix: 4.9065e-01 
+19-11-20 08:20:47.626 - INFO: [epoch:  0, iter: 246,200, lr:(1.142e-04,1.142e-04,)] l_pix: 4.3476e-01 
+19-11-20 08:22:14.295 - INFO: [epoch:  0, iter: 246,250, lr:(1.140e-04,1.140e-04,)] l_pix: 4.9261e-01 
+19-11-20 08:23:44.642 - INFO: [epoch:  0, iter: 246,300, lr:(1.138e-04,1.138e-04,)] l_pix: 3.8133e-01 
+19-11-20 08:24:54.409 - INFO: [epoch:  0, iter: 246,350, lr:(1.136e-04,1.136e-04,)] l_pix: 6.8270e-01 
+19-11-20 08:26:09.286 - INFO: [epoch:  0, iter: 246,400, lr:(1.134e-04,1.134e-04,)] l_pix: 3.5354e-01 
+19-11-20 08:27:28.571 - INFO: [epoch:  0, iter: 246,450, lr:(1.132e-04,1.132e-04,)] l_pix: 5.2243e-01 
+19-11-20 08:28:40.702 - INFO: [epoch:  0, iter: 246,500, lr:(1.130e-04,1.130e-04,)] l_pix: 4.3811e-01 
+19-11-20 08:30:04.715 - INFO: [epoch:  0, iter: 246,550, lr:(1.128e-04,1.128e-04,)] l_pix: 3.9123e-01 
+19-11-20 08:31:23.978 - INFO: [epoch:  0, iter: 246,600, lr:(1.127e-04,1.127e-04,)] l_pix: 4.1294e-01 
+19-11-20 08:32:50.173 - INFO: [epoch:  0, iter: 246,650, lr:(1.125e-04,1.125e-04,)] l_pix: 6.1450e-01 
+19-11-20 08:34:06.777 - INFO: [epoch:  0, iter: 246,700, lr:(1.123e-04,1.123e-04,)] l_pix: 4.4391e-01 
+19-11-20 08:35:33.267 - INFO: [epoch:  0, iter: 246,750, lr:(1.121e-04,1.121e-04,)] l_pix: 3.5665e-01 
+19-11-20 08:36:51.179 - INFO: [epoch:  0, iter: 246,800, lr:(1.119e-04,1.119e-04,)] l_pix: 2.7843e-01 
+19-11-20 08:38:15.856 - INFO: [epoch:  0, iter: 246,850, lr:(1.117e-04,1.117e-04,)] l_pix: 3.2038e-01 
+19-11-20 08:39:48.435 - INFO: [epoch:  0, iter: 246,900, lr:(1.115e-04,1.115e-04,)] l_pix: 3.6355e-01 
+19-11-20 08:41:12.711 - INFO: [epoch:  0, iter: 246,950, lr:(1.113e-04,1.113e-04,)] l_pix: 2.9383e-01 
+19-11-20 08:42:42.567 - INFO: [epoch:  0, iter: 247,000, lr:(1.111e-04,1.111e-04,)] l_pix: 4.5413e-01 
+19-11-20 08:44:04.976 - INFO: [epoch:  0, iter: 247,050, lr:(1.110e-04,1.110e-04,)] l_pix: 6.0290e-01 
+19-11-20 08:45:26.324 - INFO: [epoch:  0, iter: 247,100, lr:(1.108e-04,1.108e-04,)] l_pix: 4.8161e-01 
+19-11-20 08:46:41.818 - INFO: [epoch:  0, iter: 247,150, lr:(1.106e-04,1.106e-04,)] l_pix: 5.1720e-01 
+19-11-20 08:48:10.701 - INFO: [epoch:  0, iter: 247,200, lr:(1.104e-04,1.104e-04,)] l_pix: 4.3708e-01 
+19-11-20 08:49:35.284 - INFO: [epoch:  0, iter: 247,250, lr:(1.102e-04,1.102e-04,)] l_pix: 3.5809e-01 
+19-11-20 08:51:03.324 - INFO: [epoch:  0, iter: 247,300, lr:(1.100e-04,1.100e-04,)] l_pix: 2.9311e-01 
+19-11-20 08:52:23.965 - INFO: [epoch:  0, iter: 247,350, lr:(1.098e-04,1.098e-04,)] l_pix: 6.3322e-01 
+19-11-20 08:53:52.869 - INFO: [epoch:  0, iter: 247,400, lr:(1.097e-04,1.097e-04,)] l_pix: 3.4209e-01 
+19-11-20 08:55:24.899 - INFO: [epoch:  0, iter: 247,450, lr:(1.095e-04,1.095e-04,)] l_pix: 4.6746e-01 
+19-11-20 08:56:52.232 - INFO: [epoch:  0, iter: 247,500, lr:(1.093e-04,1.093e-04,)] l_pix: 5.7682e-01 
+19-11-20 08:58:20.006 - INFO: [epoch:  0, iter: 247,550, lr:(1.091e-04,1.091e-04,)] l_pix: 2.6623e-01 
+19-11-20 08:59:45.683 - INFO: [epoch:  0, iter: 247,600, lr:(1.089e-04,1.089e-04,)] l_pix: 4.1298e-01 
+19-11-20 09:01:09.543 - INFO: [epoch:  0, iter: 247,650, lr:(1.087e-04,1.087e-04,)] l_pix: 3.0918e-01 
+19-11-20 09:02:38.513 - INFO: [epoch:  0, iter: 247,700, lr:(1.085e-04,1.085e-04,)] l_pix: 5.2464e-01 
+19-11-20 09:04:14.924 - INFO: [epoch:  0, iter: 247,750, lr:(1.083e-04,1.083e-04,)] l_pix: 7.9716e-01 
+19-11-20 09:05:32.745 - INFO: [epoch:  0, iter: 247,800, lr:(1.082e-04,1.082e-04,)] l_pix: 3.0653e-01 
+19-11-20 09:06:57.089 - INFO: [epoch:  0, iter: 247,850, lr:(1.080e-04,1.080e-04,)] l_pix: 4.9561e-01 
+19-11-20 09:08:18.009 - INFO: [epoch:  0, iter: 247,900, lr:(1.078e-04,1.078e-04,)] l_pix: 4.6880e-01 
+19-11-20 09:09:37.432 - INFO: [epoch:  0, iter: 247,950, lr:(1.076e-04,1.076e-04,)] l_pix: 7.0264e-01 
+19-11-20 09:10:58.157 - INFO: [epoch:  0, iter: 248,000, lr:(1.074e-04,1.074e-04,)] l_pix: 4.8448e-01 
+19-11-20 09:12:09.014 - INFO: [epoch:  0, iter: 248,050, lr:(1.072e-04,1.072e-04,)] l_pix: 5.6575e-01 
+19-11-20 09:13:41.075 - INFO: [epoch:  0, iter: 248,100, lr:(1.070e-04,1.070e-04,)] l_pix: 4.1085e-01 
+19-11-20 09:15:00.089 - INFO: [epoch:  0, iter: 248,150, lr:(1.069e-04,1.069e-04,)] l_pix: 8.8667e-01 
+19-11-20 09:16:25.855 - INFO: [epoch:  0, iter: 248,200, lr:(1.067e-04,1.067e-04,)] l_pix: 3.0985e-01 
+19-11-20 09:18:00.873 - INFO: [epoch:  0, iter: 248,250, lr:(1.065e-04,1.065e-04,)] l_pix: 3.7852e-01 
+19-11-20 09:19:30.109 - INFO: [epoch:  0, iter: 248,300, lr:(1.063e-04,1.063e-04,)] l_pix: 4.6804e-01 
+19-11-20 09:21:03.190 - INFO: [epoch:  0, iter: 248,350, lr:(1.061e-04,1.061e-04,)] l_pix: 2.8443e-01 
+19-11-20 09:22:26.978 - INFO: [epoch:  0, iter: 248,400, lr:(1.059e-04,1.059e-04,)] l_pix: 4.5911e-01 
+19-11-20 09:23:51.735 - INFO: [epoch:  0, iter: 248,450, lr:(1.058e-04,1.058e-04,)] l_pix: 7.0281e-01 
+19-11-20 09:25:19.003 - INFO: [epoch:  0, iter: 248,500, lr:(1.056e-04,1.056e-04,)] l_pix: 2.4173e-01 
+19-11-20 09:26:42.039 - INFO: [epoch:  0, iter: 248,550, lr:(1.054e-04,1.054e-04,)] l_pix: 4.0236e-01 
+19-11-20 09:28:03.502 - INFO: [epoch:  0, iter: 248,600, lr:(1.052e-04,1.052e-04,)] l_pix: 4.4884e-01 
+19-11-20 09:29:27.327 - INFO: [epoch:  0, iter: 248,650, lr:(1.050e-04,1.050e-04,)] l_pix: 3.7910e-01 
+19-11-20 09:30:53.507 - INFO: [epoch:  0, iter: 248,700, lr:(1.048e-04,1.048e-04,)] l_pix: 4.6168e-01 
+19-11-20 09:32:19.004 - INFO: [epoch:  0, iter: 248,750, lr:(1.046e-04,1.046e-04,)] l_pix: 4.0211e-01 
+19-11-20 09:33:49.583 - INFO: [epoch:  0, iter: 248,800, lr:(1.045e-04,1.045e-04,)] l_pix: 5.5014e-01 
+19-11-20 09:35:13.265 - INFO: [epoch:  0, iter: 248,850, lr:(1.043e-04,1.043e-04,)] l_pix: 4.3193e-01 
+19-11-20 09:36:33.217 - INFO: [epoch:  0, iter: 248,900, lr:(1.041e-04,1.041e-04,)] l_pix: 4.1348e-01 
+19-11-20 09:38:01.851 - INFO: [epoch:  0, iter: 248,950, lr:(1.039e-04,1.039e-04,)] l_pix: 3.8459e-01 
+19-11-20 09:39:21.877 - INFO: [epoch:  0, iter: 249,000, lr:(1.037e-04,1.037e-04,)] l_pix: 3.3746e-01 
+19-11-20 09:40:42.585 - INFO: [epoch:  0, iter: 249,050, lr:(1.035e-04,1.035e-04,)] l_pix: 3.4022e-01 
+19-11-20 09:41:55.335 - INFO: [epoch:  0, iter: 249,100, lr:(1.034e-04,1.034e-04,)] l_pix: 4.6425e-01 
+19-11-20 09:43:28.182 - INFO: [epoch:  0, iter: 249,150, lr:(1.032e-04,1.032e-04,)] l_pix: 9.7815e-01 
+19-11-20 09:44:49.155 - INFO: [epoch:  0, iter: 249,200, lr:(1.030e-04,1.030e-04,)] l_pix: 6.7573e-01 
+19-11-20 09:46:21.281 - INFO: [epoch:  0, iter: 249,250, lr:(1.028e-04,1.028e-04,)] l_pix: 6.2664e-01 
+19-11-20 09:47:45.696 - INFO: [epoch:  0, iter: 249,300, lr:(1.026e-04,1.026e-04,)] l_pix: 3.6759e-01 
+19-11-20 09:49:05.044 - INFO: [epoch:  0, iter: 249,350, lr:(1.024e-04,1.024e-04,)] l_pix: 4.5374e-01 
+19-11-20 09:50:31.743 - INFO: [epoch:  0, iter: 249,400, lr:(1.023e-04,1.023e-04,)] l_pix: 3.4811e-01 
+19-11-20 09:51:56.812 - INFO: [epoch:  0, iter: 249,450, lr:(1.021e-04,1.021e-04,)] l_pix: 4.3968e-01 
+19-11-20 09:53:30.074 - INFO: [epoch:  0, iter: 249,500, lr:(1.019e-04,1.019e-04,)] l_pix: 6.0981e-01 
+19-11-20 09:54:50.881 - INFO: [epoch:  0, iter: 249,550, lr:(1.017e-04,1.017e-04,)] l_pix: 5.3812e-01 
+19-11-20 09:56:15.637 - INFO: [epoch:  0, iter: 249,600, lr:(1.015e-04,1.015e-04,)] l_pix: 2.6931e-01 
+19-11-20 09:57:40.498 - INFO: [epoch:  0, iter: 249,650, lr:(1.014e-04,1.014e-04,)] l_pix: 3.5781e-01 
+19-11-20 09:59:01.474 - INFO: [epoch:  0, iter: 249,700, lr:(1.012e-04,1.012e-04,)] l_pix: 5.7456e-01 
+19-11-20 10:00:19.712 - INFO: [epoch:  0, iter: 249,750, lr:(1.010e-04,1.010e-04,)] l_pix: 4.6108e-01 
+19-11-20 10:01:44.993 - INFO: [epoch:  0, iter: 249,800, lr:(1.008e-04,1.008e-04,)] l_pix: 3.4263e-01 
+19-11-20 10:03:07.663 - INFO: [epoch:  0, iter: 249,850, lr:(1.006e-04,1.006e-04,)] l_pix: 5.5052e-01 
+19-11-20 10:04:33.447 - INFO: [epoch:  0, iter: 249,900, lr:(1.004e-04,1.004e-04,)] l_pix: 6.4868e-01 
+19-11-20 10:05:59.710 - INFO: [epoch:  0, iter: 249,950, lr:(1.003e-04,1.003e-04,)] l_pix: 4.0200e-01 
+19-11-20 10:07:21.628 - INFO: [epoch:  0, iter: 250,000, lr:(1.001e-04,1.001e-04,)] l_pix: 4.4776e-01 
+19-11-20 12:09:26.228 - INFO: # Validation # PSNR: 3.6063e+01: 10091373: 3.8264e+01 10099858: 4.0139e+01 10126908: 3.8685e+01 10272022: 3.1548e+01 10306321: 3.1680e+01
+19-11-20 12:09:26.228 - INFO: Saving models and training states.
+19-11-20 12:10:59.499 - INFO: [epoch:  0, iter: 250,050, lr:(9.990e-05,9.990e-05,)] l_pix: 3.1258e-01 
+19-11-20 12:12:49.396 - INFO: [epoch:  0, iter: 250,100, lr:(9.972e-05,9.972e-05,)] l_pix: 4.0555e-01 
+19-11-20 12:14:28.689 - INFO: [epoch:  0, iter: 250,150, lr:(9.954e-05,9.954e-05,)] l_pix: 5.3711e-01 
+19-11-20 12:16:20.001 - INFO: [epoch:  0, iter: 250,200, lr:(9.935e-05,9.935e-05,)] l_pix: 7.3731e-01 
+19-11-20 12:18:01.319 - INFO: [epoch:  0, iter: 250,250, lr:(9.917e-05,9.917e-05,)] l_pix: 4.3203e-01 
+19-11-20 12:19:42.477 - INFO: [epoch:  0, iter: 250,300, lr:(9.899e-05,9.899e-05,)] l_pix: 4.1304e-01 
+19-11-20 12:21:46.923 - INFO: [epoch:  0, iter: 250,350, lr:(9.881e-05,9.881e-05,)] l_pix: 3.1061e-01 
+19-11-20 12:23:35.902 - INFO: [epoch:  0, iter: 250,400, lr:(9.863e-05,9.863e-05,)] l_pix: 4.2155e-01 
+19-11-20 12:25:18.350 - INFO: [epoch:  0, iter: 250,450, lr:(9.845e-05,9.845e-05,)] l_pix: 4.2759e-01 
+19-11-20 12:26:57.438 - INFO: [epoch:  0, iter: 250,500, lr:(9.827e-05,9.827e-05,)] l_pix: 5.8520e-01 
+19-11-20 12:28:57.432 - INFO: [epoch:  0, iter: 250,550, lr:(9.809e-05,9.809e-05,)] l_pix: 6.7473e-01 
+19-11-20 12:30:59.654 - INFO: [epoch:  0, iter: 250,600, lr:(9.791e-05,9.791e-05,)] l_pix: 6.3684e-01 
+19-11-20 12:33:00.548 - INFO: [epoch:  0, iter: 250,650, lr:(9.773e-05,9.773e-05,)] l_pix: 3.8661e-01 
+19-11-20 12:35:08.565 - INFO: [epoch:  0, iter: 250,700, lr:(9.755e-05,9.755e-05,)] l_pix: 5.0161e-01 
+19-11-20 12:36:59.022 - INFO: [epoch:  0, iter: 250,750, lr:(9.737e-05,9.737e-05,)] l_pix: 3.9201e-01 
+19-11-20 12:38:49.940 - INFO: [epoch:  0, iter: 250,800, lr:(9.719e-05,9.719e-05,)] l_pix: 6.7418e-01 
+19-11-20 12:40:32.575 - INFO: [epoch:  0, iter: 250,850, lr:(9.701e-05,9.701e-05,)] l_pix: 3.8487e-01 
+19-11-20 12:42:21.049 - INFO: [epoch:  0, iter: 250,900, lr:(9.683e-05,9.683e-05,)] l_pix: 1.6250e-01 
+19-11-20 12:44:18.012 - INFO: [epoch:  0, iter: 250,950, lr:(9.665e-05,9.665e-05,)] l_pix: 3.4880e-01 
+19-11-20 12:45:49.539 - INFO: [epoch:  0, iter: 251,000, lr:(9.647e-05,9.647e-05,)] l_pix: 4.4840e-01 
+19-11-20 12:47:46.422 - INFO: [epoch:  0, iter: 251,050, lr:(9.630e-05,9.630e-05,)] l_pix: 4.5156e-01 
+19-11-20 12:49:34.727 - INFO: [epoch:  0, iter: 251,100, lr:(9.612e-05,9.612e-05,)] l_pix: 4.5193e-01 
+19-11-20 12:51:31.483 - INFO: [epoch:  0, iter: 251,150, lr:(9.594e-05,9.594e-05,)] l_pix: 4.9307e-01 
+19-11-20 12:53:28.631 - INFO: [epoch:  0, iter: 251,200, lr:(9.576e-05,9.576e-05,)] l_pix: 3.4076e-01 
+19-11-20 12:55:20.091 - INFO: [epoch:  0, iter: 251,250, lr:(9.558e-05,9.558e-05,)] l_pix: 4.3531e-01 
+19-11-20 12:57:00.872 - INFO: [epoch:  0, iter: 251,300, lr:(9.540e-05,9.540e-05,)] l_pix: 4.9369e-01 
+19-11-20 12:58:54.774 - INFO: [epoch:  0, iter: 251,350, lr:(9.522e-05,9.522e-05,)] l_pix: 4.3204e-01 
+19-11-20 13:00:39.783 - INFO: [epoch:  0, iter: 251,400, lr:(9.504e-05,9.504e-05,)] l_pix: 3.1661e-01 
+19-11-20 13:02:38.214 - INFO: [epoch:  0, iter: 251,450, lr:(9.487e-05,9.487e-05,)] l_pix: 1.0570e+00 
+19-11-20 13:04:23.794 - INFO: [epoch:  0, iter: 251,500, lr:(9.469e-05,9.469e-05,)] l_pix: 3.5426e-01 
+19-11-20 13:06:09.872 - INFO: [epoch:  0, iter: 251,550, lr:(9.451e-05,9.451e-05,)] l_pix: 4.7823e-01 
+19-11-20 13:08:14.958 - INFO: [epoch:  0, iter: 251,600, lr:(9.433e-05,9.433e-05,)] l_pix: 5.2865e-01 
+19-11-20 13:10:00.270 - INFO: [epoch:  0, iter: 251,650, lr:(9.416e-05,9.416e-05,)] l_pix: 3.7294e-01 
+19-11-20 13:11:28.989 - INFO: [epoch:  0, iter: 251,700, lr:(9.398e-05,9.398e-05,)] l_pix: 3.5501e-01 
+19-11-20 13:13:07.285 - INFO: [epoch:  0, iter: 251,750, lr:(9.380e-05,9.380e-05,)] l_pix: 5.5515e-01 
+19-11-20 13:15:07.219 - INFO: [epoch:  0, iter: 251,800, lr:(9.362e-05,9.362e-05,)] l_pix: 4.5649e-01 
+19-11-20 13:16:55.652 - INFO: [epoch:  0, iter: 251,850, lr:(9.345e-05,9.345e-05,)] l_pix: 2.3137e-01 
+19-11-20 13:18:37.888 - INFO: [epoch:  0, iter: 251,900, lr:(9.327e-05,9.327e-05,)] l_pix: 6.3372e-01 
+19-11-20 13:20:26.059 - INFO: [epoch:  0, iter: 251,950, lr:(9.309e-05,9.309e-05,)] l_pix: 3.7807e-01 
+19-11-20 13:22:21.783 - INFO: [epoch:  0, iter: 252,000, lr:(9.291e-05,9.291e-05,)] l_pix: 6.7012e-01 
+19-11-20 13:23:56.992 - INFO: [epoch:  0, iter: 252,050, lr:(9.274e-05,9.274e-05,)] l_pix: 5.4445e-01 
+19-11-20 13:25:46.634 - INFO: [epoch:  0, iter: 252,100, lr:(9.256e-05,9.256e-05,)] l_pix: 4.1769e-01 
+19-11-20 13:27:42.902 - INFO: [epoch:  0, iter: 252,150, lr:(9.239e-05,9.239e-05,)] l_pix: 5.3079e-01 
+19-11-20 13:29:26.051 - INFO: [epoch:  0, iter: 252,200, lr:(9.221e-05,9.221e-05,)] l_pix: 2.6456e-01 
+19-11-20 13:31:07.671 - INFO: [epoch:  0, iter: 252,250, lr:(9.203e-05,9.203e-05,)] l_pix: 3.8347e-01 
+19-11-20 13:32:44.993 - INFO: [epoch:  0, iter: 252,300, lr:(9.186e-05,9.186e-05,)] l_pix: 7.0294e-01 
+19-11-20 13:34:26.647 - INFO: [epoch:  0, iter: 252,350, lr:(9.168e-05,9.168e-05,)] l_pix: 5.6396e-01 
+19-11-20 13:36:19.128 - INFO: [epoch:  0, iter: 252,400, lr:(9.150e-05,9.150e-05,)] l_pix: 4.7775e-01 
+19-11-20 13:37:57.730 - INFO: [epoch:  0, iter: 252,450, lr:(9.133e-05,9.133e-05,)] l_pix: 3.7035e-01 
+19-11-20 13:39:48.786 - INFO: [epoch:  0, iter: 252,500, lr:(9.115e-05,9.115e-05,)] l_pix: 5.3779e-01 
+19-11-20 13:41:50.269 - INFO: [epoch:  0, iter: 252,550, lr:(9.098e-05,9.098e-05,)] l_pix: 3.9731e-01 
+19-11-20 13:43:46.269 - INFO: [epoch:  0, iter: 252,600, lr:(9.080e-05,9.080e-05,)] l_pix: 3.7194e-01 
+19-11-20 13:45:30.539 - INFO: [epoch:  0, iter: 252,650, lr:(9.063e-05,9.063e-05,)] l_pix: 3.3808e-01 
+19-11-20 13:47:23.255 - INFO: [epoch:  0, iter: 252,700, lr:(9.045e-05,9.045e-05,)] l_pix: 4.5689e-01 
+19-11-20 13:49:21.305 - INFO: [epoch:  0, iter: 252,750, lr:(9.028e-05,9.028e-05,)] l_pix: 3.8458e-01 
+19-11-20 13:51:07.566 - INFO: [epoch:  0, iter: 252,800, lr:(9.010e-05,9.010e-05,)] l_pix: 4.4195e-01 
+19-11-20 13:52:59.026 - INFO: [epoch:  0, iter: 252,850, lr:(8.993e-05,8.993e-05,)] l_pix: 6.9539e-01 
+19-11-20 13:54:34.904 - INFO: [epoch:  0, iter: 252,900, lr:(8.975e-05,8.975e-05,)] l_pix: 5.3173e-01 
+19-11-20 13:56:42.807 - INFO: [epoch:  0, iter: 252,950, lr:(8.958e-05,8.958e-05,)] l_pix: 2.7842e-01 
+19-11-20 13:58:46.978 - INFO: [epoch:  0, iter: 253,000, lr:(8.940e-05,8.940e-05,)] l_pix: 6.8885e-01 
+19-11-20 14:00:30.003 - INFO: [epoch:  0, iter: 253,050, lr:(8.923e-05,8.923e-05,)] l_pix: 4.0981e-01 
+19-11-20 14:02:21.766 - INFO: [epoch:  0, iter: 253,100, lr:(8.905e-05,8.905e-05,)] l_pix: 3.4377e-01 
+19-11-20 14:04:09.451 - INFO: [epoch:  0, iter: 253,150, lr:(8.888e-05,8.888e-05,)] l_pix: 4.3971e-01 
+19-11-20 14:05:41.593 - INFO: [epoch:  0, iter: 253,200, lr:(8.871e-05,8.871e-05,)] l_pix: 5.9555e-01 
+19-11-20 14:07:41.255 - INFO: [epoch:  0, iter: 253,250, lr:(8.853e-05,8.853e-05,)] l_pix: 2.3605e-01 
+19-11-20 14:09:22.679 - INFO: [epoch:  0, iter: 253,300, lr:(8.836e-05,8.836e-05,)] l_pix: 3.7398e-01 
+19-11-20 14:11:09.255 - INFO: [epoch:  0, iter: 253,350, lr:(8.818e-05,8.818e-05,)] l_pix: 6.4833e-01 
+19-11-20 14:12:42.690 - INFO: [epoch:  0, iter: 253,400, lr:(8.801e-05,8.801e-05,)] l_pix: 5.0013e-01 
+19-11-20 14:14:17.744 - INFO: [epoch:  0, iter: 253,450, lr:(8.784e-05,8.784e-05,)] l_pix: 6.7644e-01 
+19-11-20 14:16:03.507 - INFO: [epoch:  0, iter: 253,500, lr:(8.766e-05,8.766e-05,)] l_pix: 2.8158e-01 
+19-11-20 14:18:00.923 - INFO: [epoch:  0, iter: 253,550, lr:(8.749e-05,8.749e-05,)] l_pix: 4.3006e-01 
+19-11-20 14:19:37.494 - INFO: [epoch:  0, iter: 253,600, lr:(8.732e-05,8.732e-05,)] l_pix: 3.1236e-01 
+19-11-20 14:21:42.167 - INFO: [epoch:  0, iter: 253,650, lr:(8.715e-05,8.715e-05,)] l_pix: 5.6267e-01 
+19-11-20 14:23:29.256 - INFO: [epoch:  0, iter: 253,700, lr:(8.697e-05,8.697e-05,)] l_pix: 6.0920e-01 
+19-11-20 14:25:16.695 - INFO: [epoch:  0, iter: 253,750, lr:(8.680e-05,8.680e-05,)] l_pix: 5.1676e-01 
+19-11-20 14:26:56.391 - INFO: [epoch:  0, iter: 253,800, lr:(8.663e-05,8.663e-05,)] l_pix: 8.2857e-01 
+19-11-20 14:28:42.867 - INFO: [epoch:  0, iter: 253,850, lr:(8.646e-05,8.646e-05,)] l_pix: 3.5110e-01 
+19-11-20 14:30:29.085 - INFO: [epoch:  0, iter: 253,900, lr:(8.628e-05,8.628e-05,)] l_pix: 3.4890e-01 
+19-11-20 14:32:15.670 - INFO: [epoch:  0, iter: 253,950, lr:(8.611e-05,8.611e-05,)] l_pix: 3.5978e-01 
+19-11-20 14:34:10.674 - INFO: [epoch:  0, iter: 254,000, lr:(8.594e-05,8.594e-05,)] l_pix: 3.8006e-01 
+19-11-20 14:35:58.041 - INFO: [epoch:  0, iter: 254,050, lr:(8.577e-05,8.577e-05,)] l_pix: 4.0856e-01 
+19-11-20 14:37:45.962 - INFO: [epoch:  0, iter: 254,100, lr:(8.560e-05,8.560e-05,)] l_pix: 6.6015e-01 
+19-11-20 14:39:38.148 - INFO: [epoch:  0, iter: 254,150, lr:(8.542e-05,8.542e-05,)] l_pix: 6.4507e-01 
+19-11-20 14:41:44.360 - INFO: [epoch:  0, iter: 254,200, lr:(8.525e-05,8.525e-05,)] l_pix: 6.6048e-01 
+19-11-20 14:43:28.837 - INFO: [epoch:  0, iter: 254,250, lr:(8.508e-05,8.508e-05,)] l_pix: 2.7000e-01 
+19-11-20 14:45:17.396 - INFO: [epoch:  0, iter: 254,300, lr:(8.491e-05,8.491e-05,)] l_pix: 5.4565e-01 
+19-11-20 14:47:20.557 - INFO: [epoch:  0, iter: 254,350, lr:(8.474e-05,8.474e-05,)] l_pix: 5.7655e-01 
+19-11-20 14:49:07.697 - INFO: [epoch:  0, iter: 254,400, lr:(8.457e-05,8.457e-05,)] l_pix: 4.4132e-01 
+19-11-20 14:51:03.211 - INFO: [epoch:  0, iter: 254,450, lr:(8.440e-05,8.440e-05,)] l_pix: 7.9070e-01 
+19-11-20 14:52:48.182 - INFO: [epoch:  0, iter: 254,500, lr:(8.423e-05,8.423e-05,)] l_pix: 4.5720e-01 
+19-11-20 14:54:41.252 - INFO: [epoch:  0, iter: 254,550, lr:(8.406e-05,8.406e-05,)] l_pix: 4.3130e-01 
+19-11-20 14:56:48.417 - INFO: [epoch:  0, iter: 254,600, lr:(8.389e-05,8.389e-05,)] l_pix: 3.8459e-01 
+19-11-20 14:58:37.914 - INFO: [epoch:  0, iter: 254,650, lr:(8.371e-05,8.371e-05,)] l_pix: 4.8071e-01 
+19-11-20 15:00:28.520 - INFO: [epoch:  0, iter: 254,700, lr:(8.354e-05,8.354e-05,)] l_pix: 6.0587e-01 
+19-11-20 15:02:23.045 - INFO: [epoch:  0, iter: 254,750, lr:(8.337e-05,8.337e-05,)] l_pix: 3.9930e-01 
+19-11-20 15:04:16.440 - INFO: [epoch:  0, iter: 254,800, lr:(8.320e-05,8.320e-05,)] l_pix: 6.9449e-01 
+19-11-20 15:06:16.413 - INFO: [epoch:  0, iter: 254,850, lr:(8.303e-05,8.303e-05,)] l_pix: 4.8989e-01 
+19-11-20 15:08:04.103 - INFO: [epoch:  0, iter: 254,900, lr:(8.286e-05,8.286e-05,)] l_pix: 4.0086e-01 
+19-11-20 15:10:08.563 - INFO: [epoch:  0, iter: 254,950, lr:(8.270e-05,8.270e-05,)] l_pix: 3.2761e-01 
+19-11-20 15:12:10.978 - INFO: [epoch:  0, iter: 255,000, lr:(8.253e-05,8.253e-05,)] l_pix: 1.8702e-01 
+19-11-20 17:55:28.682 - INFO: # Validation # PSNR: 3.6124e+01: 10091373: 3.8289e+01 10099858: 4.0206e+01 10126908: 3.8720e+01 10272022: 3.1652e+01 10306321: 3.1750e+01
+19-11-20 17:55:28.682 - INFO: Saving models and training states.
+19-11-20 17:57:13.650 - INFO: [epoch:  0, iter: 255,050, lr:(8.236e-05,8.236e-05,)] l_pix: 4.8323e-01 
