@@ -1,1 +1,1 @@
-python codes/my_test.py -opt /home/lzy/Downloads/vider_sr/codes/options/test/my_test.yml && python results/png2video.py
+python codes/my_test.py -opt codes/options/test/my_test.yml && python results/png2video.py
